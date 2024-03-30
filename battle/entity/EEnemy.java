@@ -158,7 +158,7 @@ public class EEnemy extends Entity {
 		}
 
 		if ((atk.abi & AB_SKILL) == 0 && traits.contains(BCTraits.get(TRAIT_SAGE)) && canBeApplied) {
-			ans = (1f - SUPER_SAGE_RESIST);
+			ans *= (1f - SUPER_SAGE_RESIST);
 		}
 
 		return ans;
