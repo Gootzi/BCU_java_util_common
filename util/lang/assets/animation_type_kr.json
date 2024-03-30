@@ -77,5 +77,9 @@
   "DmgCap": {
     "FAIL" : "실패",
     "SUCCESS" : "성공"
+  },
+  "GuardEff": {
+    "NONE": "기본",
+    "BREAK": "부서짐"
   }
 }

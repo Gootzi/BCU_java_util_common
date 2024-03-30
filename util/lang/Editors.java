@@ -683,6 +683,10 @@ public class Editors {
 		}));
 
 		map().put("SPIRIT", new EditControl<>(Proc.SPIRIT.class, (t) -> {}));
+
+		map().put("METALKILL", new EditControl<>(Proc.MULT.class, (t) -> {
+			t.mult = Math.max(0, Math.min(100, t.mult));
+		}));
 	}
 
 	private static void setComponentVisibility(EditorGroup egg, boolean boo, int... fields) {

@@ -46,6 +46,21 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		}
 	}
 
+	public enum GuardEff implements  EffType<GuardEff> {
+		NONE(""), BREAK("_breaker");
+
+		private final String path;
+
+		GuardEff(String path) {
+			this.path = path;
+		}
+
+		@Override
+		public String path() {
+			return path;
+		}
+	}
+
 	public enum ShieldEff implements EffType<ShieldEff> {
 		FULL("00"), HALF("01"), BROKEN("_destruction"), BREAKER("_breaker"), REGENERATION("_revive");
 
@@ -244,6 +259,12 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		public EffAnim<DefEff> A_COUNTERSURGE;
 		@Order(76)
 		public EffAnim<DefEff> A_E_COUNTERSURGE;
+		@Order(77)
+		public EffAnim<GuardEff> A_E_GUARD; // Dummy "yet"
+		@Order(78)
+		public EffAnim<DefEff> A_METAL_KILLER;
+		@Order(79)
+		public EffAnim<DefEff> A_E_METAL_KILLER;
 
 		public EffAnim<?>[] values() {
 			Field[] fld = FieldOrder.getDeclaredFields(EffAnimStore.class);
@@ -466,6 +487,14 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		iccs = ImgCut.newIns("./org/battle/s18/skill018.imgcut");
 		vcs = new VImg("./org/battle/s18/skill018.png");
 		effas.A_COUNTERSURGE = new EffAnim<>("./org/battle/s18/skill_demonsummon", vcs, iccs, DefEff.values());
+		VImg vgd = new VImg("./org/battle/s19/skill019.png");
+		ImgCut icgd = ImgCut.newIns("./org/battle/s19/skill019.imgcut");
+		effas.A_E_GUARD = new EffAnim<>("./org/battle/s19/skill_guard_e", vgd, icgd, GuardEff.values());
+		VImg vmk = new VImg("./org/battle/s20/skill020.png");
+		ImgCut icmk = ImgCut.newIns("./org/battle/s20/skill020.imgcut");
+		effas.A_METAL_KILLER = new EffAnim<>("./org/battle/s20/skill_metal_strong", vmk, icmk, DefEff.values());
+		effas.A_E_METAL_KILLER = new EffAnim<>("./org/battle/s20/skill_metal_strong", vmk, icmk, DefEff.values());
+		effas.A_E_METAL_KILLER.rev = true;
 	}
 
 	private static void excColor(FakeImage fimg, Function<int[], Integer> f) {
@@ -643,9 +672,11 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 
 	@Override
 	public String toString() {
-		if (name.length() > 0)
+		if (!name.isEmpty())
 			return name;
+
 		String[] ss = str.split("/");
+
 		return ss[ss.length - 1];
 	}
 

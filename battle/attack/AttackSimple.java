@@ -65,7 +65,7 @@ public class AttackSimple extends AttackAb {
 				if (e.ctargetable(trait, attacker, true))
 					capt.add(e);
 		if (!range) {
-			if (capt.size() == 0)
+			if (capt.isEmpty())
 				return;
 
 			List<AbEntity> ents = new ArrayList<>();
@@ -100,7 +100,7 @@ public class AttackSimple extends AttackAb {
 		if (ce != null && !capt.contains(ce))
 			capt.add(ce);
 		excuse();
-		return capt.size() > 0;
+		return !capt.isEmpty();
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class AttackSimple extends AttackAb {
 			e.damaged(this);
 			attacked.add(e);
 		}
-		if (capt.size() > 0 && proc.WAVE.exists()) {
+		if (!capt.isEmpty() && proc.WAVE.exists()) {
 			int dire = model.getDire();
 			int wid = dire == 1 ? W_E_WID : W_U_WID;
 			float addp = (dire == 1 ? W_E_INI : W_U_INI) + wid / 2f;
@@ -142,7 +142,7 @@ public class AttackSimple extends AttackAb {
 			}
 		}
 
-		if(capt.size() > 0 && proc.MINIWAVE.exists()) {
+		if(!capt.isEmpty() && proc.MINIWAVE.exists()) {
 			int dire = model.getDire();
 			int wid = dire == 1 ? W_E_WID : W_U_WID;
 			float addp = (dire == 1 ? W_E_INI : W_U_INI) + wid / 2f;
@@ -155,7 +155,7 @@ public class AttackSimple extends AttackAb {
 			}
 		}
 
-		if (capt.size() > 0 && proc.VOLC.exists()) {
+		if (!capt.isEmpty() && proc.VOLC.exists()) {
 			int dire = model.getDire();
 			VOLC volc = proc.VOLC;
 			int addp = volc.dis_0 + (int) (model.b.r.nextFloat() * (volc.dis_1 - volc.dis_0));
@@ -170,7 +170,7 @@ public class AttackSimple extends AttackAb {
 			}
 		}
 
-		if (capt.size() > 0 && proc.MINIVOLC.exists()) {
+		if (!capt.isEmpty() && proc.MINIVOLC.exists()) {
 			int dire = model.getDire();
 			Proc.MINIVOLC volc = proc.MINIVOLC;
 			int addp = volc.dis_0 + (int) (model.b.r.nextFloat() * (volc.dis_1 - volc.dis_0));

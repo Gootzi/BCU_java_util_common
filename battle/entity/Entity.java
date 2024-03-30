@@ -1650,6 +1650,18 @@ public abstract class Entity extends AbEntity {
 			}
 		}
 
+		boolean metalKillerActivate = atk.getProc().METALKILL.mult > 0;
+
+		if (dire == 1) {
+			metalKillerActivate &= data.getTraits().contains(UserProfile.getBCData().traits.get(TRAIT_METAL));
+		} else if (dire == -1) {
+			metalKillerActivate &= (data.getAbi() & AB_METALIC) != 0;
+		}
+
+		if (metalKillerActivate) {
+			dmg = dmg + (int) (health * atk.getProc().METALKILL.mult / 100f);
+		}
+
 		if (!shieldContinue) {
 			if (atk.getProc().SHIELDBREAK.prob > 0) {
 				currentShield = 0;
@@ -1693,6 +1705,11 @@ public abstract class Entity extends AbEntity {
 			basis.lea.sort(Comparator.comparingInt(e -> e.layer));
 
 			CommonStatic.setSE(SE_SATK);
+		}
+
+		if (metalKillerActivate) {
+			basis.lea.add(new EAnimCont(pos, layer, (dire == 1 ? effas().A_E_METAL_KILLER : effas().A_METAL_KILLER).getEAnim(DefEff.DEF), -75f));
+			basis.lea.sort(Comparator.comparingInt(e -> e.layer));
 		}
 
 		if (!shieldContinue)

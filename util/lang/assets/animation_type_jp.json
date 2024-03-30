@@ -77,5 +77,9 @@
   "DmgCap": {
     "FAIL" : "失敗",
     "SUCCESS" : "成功"
+  },
+  "GuardEff": {
+    "NONE": "デフォルト",
+    "BREAK": "壊す"
   }
 }

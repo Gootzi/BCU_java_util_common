@@ -222,15 +222,16 @@ public class Res extends ImgCore {
 		aux.icon[0][ABI_CSUR] = new VImg(parts[315]);
 		aux.icon[1][P_SPIRIT] = new VImg(parts[317]);
 		aux.icon[0][ABI_SKILL] = new VImg(parts[319]);
-		aux.icon[1][P_DEMONSHIELD] = new VImg("./org/page/icons/DemonShield.png");
-		aux.icon[1][P_DEATHSURGE] = new VImg("./org/page/icons/DeathSurge.png");
+		aux.icon[1][P_METALKILL] = new VImg(parts[321]);
+		aux.icon[1][P_DEMONSHIELD] = new VImg(parts[331]);
+		aux.icon[1][P_DEATHSURGE] = new VImg(parts[332]);
 
 		aux.icon[1][P_IMUSUMMON] = new VImg("./org/page/icons/SummonX.png");
 		aux.icon[1][P_DMGCUT] = new VImg("./org/page/icons/DmgCut.png");
 		aux.icon[1][P_DMGCAP] = new VImg("./org/page/icons/DmgCap.png");
 		aux.icon[1][P_IMUARMOR] = new VImg("./org/page/icons/ArmorBreakX.png");
 		aux.icon[1][P_IMUSPEED] = new VImg("./org/page/icons/SpeedX.png");
-		aux.icon[1][P_BARRIER] = new VImg("./org/page/icons/Barrier.png");
+		aux.icon[1][P_BARRIER] = new VImg(parts[330]);
 		aux.icon[1][P_COUNTER] = new VImg("./org/page/icons/Counter.png");
 		aux.icon[1][P_IMUCANNON] = new VImg("./org/page/icons/CannonX.png");
 
@@ -254,7 +255,7 @@ public class Res extends ImgCore {
 		aux.icon[1][P_TIME] = new VImg("./org/page/icons/Time.png");
 		aux.icon[1][P_BOSS] = new VImg("./org/page/icons/BossWave.png");
 		aux.icon[1][P_SNIPER] = new VImg("./org/page/icons/Snipe.png");
-		aux.icon[1][P_POISON] = new VImg("./org/page/icons/Poison.png");
+		aux.icon[1][P_POISON] = new VImg(parts[329]);
 		aux.icon[1][P_SEAL] = new VImg("./org/page/icons/Seal.png");
 		aux.icon[1][P_MOVEWAVE] = new VImg("./org/page/icons/Moving.png");
 		aux.icon[1][P_SUMMON] = new VImg("./org/page/icons/Summon.png");

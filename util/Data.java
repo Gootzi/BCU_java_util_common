@@ -18,6 +18,7 @@ import common.util.stage.Music;
 import java.lang.annotation.*;
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unused")
 @StaticPermitted
 public class Data {
 
@@ -822,6 +823,8 @@ public class Data {
 		public final MINIVOLC MINIVOLC = new MINIVOLC();
 		@Order(56)
 		public final SPIRIT SPIRIT = new SPIRIT();
+		@Order(57)
+		public final MULT METALKILL = new MULT();
 
 		@Override
 		public Proc clone() {
@@ -1191,7 +1194,8 @@ public class Data {
 	public static final int P_BSTHUNT = 54; //Beast Killer
 	public static final int P_MINIVOLC = 55;
 	public static final int P_SPIRIT = 56;
-	public static final byte PROC_TOT = 57;
+	public static final int P_METALKILL = 57;
+	public static final byte PROC_TOT = 58;
 	public static final byte PROC_WIDTH = 6;
 
 	public static final boolean[] procSharable = {
@@ -1251,7 +1255,8 @@ public class Data {
 			false, //base destroyer
 			true, //beast hunter
 			false, //mini surge
-			true //spirit summon
+			true, //spirit summon
+			false //metal killer
 	};
 
 	/**
