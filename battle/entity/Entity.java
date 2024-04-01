@@ -1659,7 +1659,7 @@ public abstract class Entity extends AbEntity {
 		}
 
 		if (metalKillerActivate) {
-			dmg = dmg + (int) (health * atk.getProc().METALKILL.mult / 100f);
+			dmg = dmg + (int) Math.max(health * atk.getProc().METALKILL.mult / 100f, 1f);
 		}
 
 		if (!shieldContinue) {
