@@ -66,9 +66,11 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 			piv.x = args[6] + v;
 		else if (m == 7)
 			piv.y = args[7] + v;
-		else if (m == 8)
+		else if (m == 8) {
+			sca.x = 1f * args[8] * v / model.ints[0];
+			sca.y = 1f * args[9] * v / model.ints[0];
 			gsca = v;
-		else if (m == 9)
+		} else if (m == 9)
 			sca.x = 1f * args[8] * v / model.ints[0];
 		else if (m == 10)
 			sca.y = 1f * args[9] * v / model.ints[0];
@@ -206,8 +208,7 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 		if (extType == 0)
 			drawImg(g, bimg, tpiv, sc, opa() * opacity / 255f, glow, extendX / model.ints[0], extendY / model.ints[0]);
 		else if (extType == 1)
-			drawRandom(g, new FakeImage[] { a.parts(3), a.parts(4), a.parts(5), a.parts(6) }, tpiv, sc, opa(),
-					glow == 1, extendX / model.ints[0], extendY / model.ints[0]);
+			drawRandom(g, new FakeImage[] { a.parts(3), a.parts(4), a.parts(5), a.parts(6) }, tpiv, sc, opa(), glow == 1, extendX / model.ints[0], extendY / model.ints[0]);
 		P.delete(tpiv);
 		P.delete(sc);
 		g.setTransform(at);
@@ -264,9 +265,11 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 
 	private P getSize() {
 		float mi = 1f / model.ints[0];
+
 		if (fa == null)
-			return P.newP(sca).times(gsca * mi * mi);
-		return fa.getSize().times(sca).times(gsca * mi * mi);
+			return P.newP(sca).times(mi);
+
+		return fa.getSize().times(sca).times(mi);
 	}
 
 	private P getBaseSize(boolean parent) {
@@ -304,43 +307,39 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 	}
 
 	private void transform(FakeGraphics g, P sizer) {
-		P siz = sizer;
-		if (fa != null) {
-			fa.transform(g, sizer);
-			siz = fa.getSize().times(sizer);
-		}
-
-		P tpos = P.newP(pos).times(siz);
-
 		if (ent[0] != this) {
-			g.translate(tpos.x, tpos.y);
+			P scaledPosition;
+
+			if (fa != null) {
+				scaledPosition = fa.getSize().times(sizer).times(pos);
+				fa.transform(g, sizer);
+			} else
+				scaledPosition = P.newP(sizer).times(pos);
+
+			g.translate(scaledPosition.x, scaledPosition.y);
 			g.scale(hf, vf);
+
+			P.delete(scaledPosition);
 		} else {
 			if (model.confs.length > 0) {
 				int[] data = model.confs[0];
-				P p0 = getBaseSize(false);
 
-				P shi = P.newP(data[2], data[3]).times(p0);
+				P p0 = getBaseSize(false).times(data[2], data[3]).times(sizer);
+
+				g.translate(-p0.x, -p0.y);
+
 				P.delete(p0);
-				P p3 = shi.times(sizer);
-				g.translate(-p3.x, -p3.y);
-
-				P.delete(shi);
 			}
-			P p0 = getSize();
-			P p = P.newP(piv).times(p0).times(sizer);
-			P.delete(p0);
-			g.translate(p.x, p.y);
 
-			P.delete(p);
+			P p0 = getSize().times(sizer).times(piv);
+
+			g.translate(p0.x, p0.y);
+
+			P.delete(p0);
 		}
+
 		if (angle != 0)
 			g.rotate((float) (Math.PI * 2 * angle / model.ints[1]));
-
-		P.delete(tpos);
-
-		if (fa != null)
-			P.delete(siz);
 	}
 
 }

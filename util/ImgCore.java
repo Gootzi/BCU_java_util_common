@@ -169,9 +169,9 @@ public class ImgCore extends Data {
 		int x = (int) -piv.x;
 		int y = (int) -piv.y;
 		if (sc.x < 0)
-			x += sc.x;
+			x = (int) (x + sc.x);
 		if (sc.y < 0)
-			y += sc.y;
+			y = (int) (y + sc.y);
 		int sx = (int) Math.abs(sc.x);
 		int sy = (int) Math.abs(sc.y);
 		g.drawRect(x, y, sx, sy);
@@ -180,10 +180,10 @@ public class ImgCore extends Data {
 	}
 
 	private static void drawImage(FakeGraphics g, FakeImage bimg, float x, float y, float w, float h) {
-		int ix = (int) Math.round(x);
-		int iy = (int) Math.round(y);
-		int iw = (int) Math.round(w);
-		int ih = (int) Math.round(h);
+		int ix = Math.round(x);
+		int iy = Math.round(y);
+		int iw = Math.round(w);
+		int ih = Math.round(h);
 		g.drawImage(bimg, ix, iy, iw, ih);
 
 	}
