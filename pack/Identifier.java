@@ -165,7 +165,7 @@ public class Identifier<T extends IndexContainer.Indexable<?, T>> implements Com
 		if (cont == null)
 			return null;
 
-		return (T) cont.getList(cls, (r, l) -> r == null ? l.getRaw(id) : r, null);
+		return cont.getList(cls, (r, l) -> r == null ? (T) l.getRaw(id) : r, (T) getOr(this, cls));
 	}
 
 	public IndexContainer getCont() {
