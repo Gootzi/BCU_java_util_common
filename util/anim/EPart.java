@@ -307,14 +307,18 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 	}
 
 	private void transform(FakeGraphics g, P sizer) {
+		if (fa != null) {
+			fa.transform(g, sizer);
+		}
+
 		if (ent[0] != this) {
 			P scaledPosition;
 
 			if (fa != null) {
 				scaledPosition = fa.getSize().times(sizer).times(pos);
-				fa.transform(g, sizer);
-			} else
+			} else {
 				scaledPosition = P.newP(sizer).times(pos);
+			}
 
 			g.translate(scaledPosition.x, scaledPosition.y);
 			g.scale(hf, vf);
