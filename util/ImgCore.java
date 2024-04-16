@@ -180,11 +180,7 @@ public class ImgCore extends Data {
 	}
 
 	private static void drawImage(FakeGraphics g, FakeImage bimg, float x, float y, float w, float h) {
-		int ix = Math.round(x);
-		int iy = Math.round(y);
-		int iw = Math.round(w);
-		int ih = Math.round(h);
-		g.drawImage(bimg, ix, iy, iw, ih);
+		g.drawImage(bimg, x, y, w, h);
 
 	}
 
