@@ -49,6 +49,33 @@ public class Identifier<T extends IndexContainer.Indexable<?, T>> implements Com
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static <T> T tryGet(Identifier<?> id, Class<T> cls) {
+		if (id != null) {
+			IndexContainer ic = (IndexContainer) getContainer(id.cls, id.pack);
+
+			if (ic != null) {
+				Object ans = ic.getList(id.cls, (r, l) -> {
+					if (l == null || l.size() == 0) {
+						return null;
+					} else {
+						return l.getRaw(id.id);
+					}
+				}, null);
+
+				return (T) ans;
+			}
+		}
+
+		if(cls == EneRand.class) {
+			return (T) new Identifier(DEF, Enemy.class, 0).get();
+		} else if (cls == Stage.class) {
+			return (T) new Identifier(DEF + "/0", Stage.class, 0).get();
+		} else {
+			return (T) new Identifier(DEF, cls, 0).get();
+		}
+	}
+
 	/**
 	 * cls must be a class implementing Indexable. interfaces or other classes will
 	 * go through fixer
@@ -93,7 +120,7 @@ public class Identifier<T extends IndexContainer.Indexable<?, T>> implements Com
 		IndexContainer.IndexCont cont = null;
 		Queue<Class<?>> q = new ArrayDeque<>();
 		q.add(cls);
-		while (q.size() > 0) {
+		while (!q.isEmpty()) {
 			Class<?> ci = q.poll();
 			if ((cont = ci.getAnnotation(IndexContainer.IndexCont.class)) != null)
 				break;
@@ -165,7 +192,7 @@ public class Identifier<T extends IndexContainer.Indexable<?, T>> implements Com
 		if (cont == null)
 			return null;
 
-		return cont.getList(cls, (r, l) -> r == null ? (T) l.getRaw(id) : r, (T) getOr(this, cls));
+		return cont.getList(cls, (r, l) -> r == null ? (T) l.getRaw(id) : r, (T) tryGet(this, cls));
 	}
 
 	public IndexContainer getCont() {
