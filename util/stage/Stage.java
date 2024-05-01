@@ -54,7 +54,7 @@ public class Stage extends Data
 	@JsonField(generic = MultiLangData.class)
 	public MultiLangData names = new MultiLangData();
 
-	public boolean non_con, trail;
+	public boolean non_con, trail, bossGuard;
 	public int len, health, max, mush, bgh;
 	public int timeLimit = 0;
 	public int minSpawn = 1, maxSpawn = 1;
@@ -100,16 +100,23 @@ public class Stage extends Data
 		Queue<String> qs = f.getData().readLine();
 		names.put("" + id);
 		String temp;
+		boolean hasCastleData = false;
 		if (type == 0) {
 			temp = qs.poll();
 
 			if(temp != null) {
+				hasCastleData = true;
+
 				String[] strs = temp.split(",");
+
 				int cas = CommonStatic.parseIntN(strs[0]);
+
 				if (cas == -1)
 					cas = CH_CASTLES[id.id];
+
 				if (sm.cast != -1)
 					cas = sm.cast * 1000 + cas;
+
 				castle = Identifier.parseInt(cas, CastleImg.class);
 				non_con = strs[1].equals("1");
 
@@ -135,6 +142,12 @@ public class Stage extends Data
 			timeLimit = strs.length >= 8 ? Math.max(Integer.parseInt(strs[7]), 0) : 0;
 			if(timeLimit != 0)
 				health = Integer.MAX_VALUE;
+
+			// Must be parsed only when it's for normal stages, not EoC/ItF/CotC
+			if (hasCastleData) {
+				bossGuard = Integer.parseInt(strs[8]) == 1;
+			}
+
 			trail = timeLimit != 0;
 
 			int isBase = Integer.parseInt(strs[6]) - 2;
