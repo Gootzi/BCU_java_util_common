@@ -154,8 +154,8 @@ public class Stage extends Data
 
 			List<int[]> ll = new ArrayList<>();
 
-			while (qs.size() > 0)
-				if ((temp = qs.poll()).length() > 0) {
+			while (!qs.isEmpty())
+				if (!(temp = qs.poll()).isEmpty()) {
 					if (!Character.isDigit(temp.charAt(0)))
 						break;
 					if (temp.startsWith("0,"))
@@ -297,10 +297,10 @@ public class Stage extends Data
 	@Override
 	public String toString() {
 		String desp = MultiLangCont.get(this);
-		if (desp != null && desp.length() > 0)
+		if (desp != null && !desp.isEmpty())
 			return desp;
 		String n = names.toString();
-		if (n.length() > 0)
+		if (!n.isEmpty())
 			return n;
 		return map + " - " + id();
 	}
