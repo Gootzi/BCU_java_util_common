@@ -18,6 +18,11 @@ public class StageLimit extends Data implements BattleStatic {
     @JsonField(generic = Integer.class)
     public Set<Integer> bannedCatCombo = new HashSet<>();
 
+    public StageLimit() {
+        maxMoney = 0;
+        globalCooldown = 0;
+    }
+
     public StageLimit(int maxMoney, int globalCooldown, List<Integer> bannedCombo) {
         this.maxMoney = maxMoney;
         this.globalCooldown = globalCooldown;
