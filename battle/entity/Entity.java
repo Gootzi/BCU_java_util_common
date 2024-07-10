@@ -1698,7 +1698,7 @@ public abstract class Entity extends AbEntity {
 
 		if (!isBase)
 			CommonStatic.setSE((basis.r.irDouble() < 0.5 ? SE_HIT_0 : SE_HIT_1));
-		else if (basis.activeGuard == 1)
+		else if (basis.activeGuard != 1)
 			CommonStatic.setSE(SE_HIT_BASE);
 
 		damage += dmg;
