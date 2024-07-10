@@ -55,6 +55,7 @@ public class StageBasis extends BattleObj {
 	public int[] selectedUnit = {-1, -1};
 	public final float boss_spawn;
 	public final int[] shakeCoolDown = {0, 0};
+	public boolean activeGuard = false;
 
 	public float siz;
 	public int work_lv, money, maxMoney, cannon, maxCannon, upgradeCost, max_num, pos;

@@ -1096,10 +1096,7 @@ public abstract class Entity extends AbEntity {
 				e.status[P_BARRIER][1] = regen + len;
 			}
 
-			if (abi)
-				e.anim.getEff(BREAK_ABI);
-			else
-				e.anim.getEff(BREAK_ATK);
+			e.anim.getEff(abi ? BREAK_ABI : BREAK_ATK);
 		}
 	}
 
@@ -2142,7 +2139,11 @@ public abstract class Entity extends AbEntity {
 		}
 		if (!isBase && damage > 0 && kbTime <= 0 && kbTime != -1 && (ext <= damage * hb || health < damage))
 			interrupt(INT_HB, KB_DIS[INT_HB]);
-		health -= damage;
+		if (isBase && basis.activeGuard) {
+
+		} else {
+			health -= damage;
+		}
 
 		if (health > maxH)
 			health = maxH;
