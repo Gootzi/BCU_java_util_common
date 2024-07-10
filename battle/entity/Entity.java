@@ -233,39 +233,32 @@ public abstract class Entity extends AbEntity {
 				eftp = A_EFF_INV;
 				effs[eftp] = effas().A_EFF_INV.getEAnim(DefEff.DEF);
 				efft = effas().A_EFF_INV.len(DefEff.DEF);
-			}
-			if (t == P_WAVE) {
+			} else if (t == P_WAVE) {
 				int id = dire == -1 ? A_WAVE_INVALID : A_E_WAVE_INVALID;
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_WAVE_INVALID : effas().A_E_WAVE_INVALID;
 				effs[id] = eff.getEAnim(DefEff.DEF);
 				status[P_WAVE][0] = eff.len(DefEff.DEF);
-			}
-			if (t == STPWAVE) {
+			} else if (t == STPWAVE) {
 				effs[eftp] = null;
 				eftp = dire == -1 ? A_WAVE_STOP : A_E_WAVE_STOP;
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_WAVE_STOP : effas().A_E_WAVE_STOP;
 				effs[eftp] = eff.getEAnim(DefEff.DEF);
 				efft = eff.len(DefEff.DEF);
-			}
-			if (t == INVWARP) {
+			} else if (t == INVWARP) {
 				effs[eftp] = null;
 				eftp = dire == -1 ? A_FARATTACK : A_E_FARATTACK;
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_FARATTACK : effas().A_E_FARATTACK;
 				effs[eftp] = eff.getEAnim(DefEff.DEF);
 				efft = eff.len(DefEff.DEF);
-			}
-			if (t == P_STOP) {
+			} else if (t == P_STOP) {
 				int id = dire == -1 ? A_STOP : A_E_STOP;
 				effs[id] = (dire == -1 ? effas().A_STOP : effas().A_E_STOP).getEAnim(DefEff.DEF);
-			}
-			if (t == P_IMUATK) {
+			} else if (t == P_IMUATK) {
 				effs[A_IMUATK] = effas().A_IMUATK.getEAnim(DefEff.DEF);
-			}
-			if (t == P_SLOW) {
+			} else if (t == P_SLOW) {
 				int id = dire == -1 ? A_SLOW : A_E_SLOW;
 				effs[id] = (dire == -1 ? effas().A_SLOW : effas().A_E_SLOW).getEAnim(DefEff.DEF);
-			}
-			if (t == P_WEAK) {
+			} else if (t == P_WEAK) {
 				if (status[P_WEAK][1] <= 100) {
 					int id = dire == -1 ? A_DOWN : A_E_DOWN;
 					effs[id] = (dire == -1 ? effas().A_DOWN : effas().A_E_DOWN).getEAnim(DefEff.DEF);
@@ -273,12 +266,10 @@ public abstract class Entity extends AbEntity {
 					int id = dire == -1 ? A_WEAK_UP : A_E_WEAK_UP;
 					effs[id] = (dire == -1 ? effas().A_WEAK_UP : effas().A_E_WEAK_UP).getEAnim(WeakUpEff.UP);
 				}
-			}
-			if (t == P_CURSE) {
+			} else if (t == P_CURSE) {
 				int id = dire == -1 ? A_CURSE : A_E_CURSE;
 				effs[id] = (dire == -1 ? effas().A_CURSE : effas().A_E_CURSE).getEAnim(DefEff.DEF);
-			}
-			if (t == P_POISON) {
+			} else if (t == P_POISON) {
 				int mask = status[P_POISON][0];
 				EffAnim<?>[] arr = { effas().A_POI0, e.dire == -1 ? effas().A_POI1 : effas().A_POI1_E, effas().A_POI2, effas().A_POI3, effas().A_POI4,
 						effas().A_POI5, effas().A_POI6, effas().A_POI7 };
@@ -288,22 +279,18 @@ public abstract class Entity extends AbEntity {
 						effs[id] = ((EffAnim<DefEff>) arr[i]).getEAnim(DefEff.DEF);
 					}
 
-			}
-			if (t == P_SEAL) {
+			} else if (t == P_SEAL) {
 				effs[dire == -1 ? A_SEAL : A_E_SEAL] = (dire == -1 ? effas().A_SEAL : effas().A_E_SEAL).getEAnim(DefEff.DEF);
-			}
-			if (t == P_STRONG) {
+			} else if (t == P_STRONG) {
 				int id = dire == -1 ? A_UP : A_E_UP;
 				effs[id] = (dire == -1 ? effas().A_UP : effas().A_E_UP).getEAnim(DefEff.DEF);
-			}
-			if (t == P_LETHAL) {
+			} else if (t == P_LETHAL) {
 				int id = dire == -1 ? A_SHIELD : A_E_SHIELD;
 				EffAnim<DefEff> ea = dire == -1 ? effas().A_SHIELD : effas().A_E_SHIELD;
 				status[P_LETHAL][1] = ea.len(DefEff.DEF);
 				effs[id] = ea.getEAnim(DefEff.DEF);
 				CommonStatic.setSE(SE_LETHAL);
-			}
-			if (t == P_WARP) {
+			} else if (t == P_WARP) {
 				EffAnim<WarpEff> ea = effas().A_W;
 				int ind = status[P_WARP][2];
 				WarpEff pa = ind == 0 ? WarpEff.ENTER : WarpEff.EXIT;
@@ -312,34 +299,27 @@ public abstract class Entity extends AbEntity {
 				CommonStatic.setSE(ind == 0 ? SE_WARP_ENTER : SE_WARP_EXIT);
 				status[P_WARP][ind] = ea.len(pa);
 
-			}
-
-			if (t == BREAK_ABI) {
+			} else if (t == BREAK_ABI) {
 				int id = dire == -1 ? A_B : A_E_B;
 				effs[id] = (dire == -1 ? effas().A_B : effas().A_E_B).getEAnim(BarrierEff.BREAK);
 				status[P_BREAK][0] = effs[id].len();
 				CommonStatic.setSE(SE_BARRIER_ABI);
-			}
-			if (t == BREAK_ATK) {
+			} else if (t == BREAK_ATK) {
 				int id = dire == -1 ? A_B : A_E_B;
 				effs[id] = (dire == -1 ? effas().A_B : effas().A_E_B).getEAnim(BarrierEff.DESTR);
 				status[P_BREAK][0] = effs[id].len();
 				CommonStatic.setSE(SE_BARRIER_ATK);
-			}
-			if (t == BREAK_NON) {
+			} else if (t == BREAK_NON) {
 				int id = dire == -1 ? A_B : A_E_B;
 				effs[id] = (dire == -1 ? effas().A_B : effas().A_E_B).getEAnim(BarrierEff.NONE);
 				status[P_BREAK][0] = effs[id].len();
 				CommonStatic.setSE(SE_BARRIER_NON);
-			}
-			if (t == P_ARMOR) {
+			} else if (t == P_ARMOR) {
 				int id = dire == -1 ? A_ARMOR : A_E_ARMOR;
 				EffAnim<ArmorEff> eff = dire == -1 ? effas().A_ARMOR : effas().A_E_ARMOR;
 				ArmorEff index = status[P_ARMOR][1] >= 0 ? ArmorEff.DEBUFF : ArmorEff.BUFF;
 				effs[id] = eff.getEAnim(index);
-			}
-
-			if (t == P_SPEED) {
+			} else if (t == P_SPEED) {
 				int id = dire == -1 ? A_SPEED : A_E_SPEED;
 				EffAnim<SpeedEff> eff = dire == -1 ? effas().A_SPEED : effas().A_E_SPEED;
 				SpeedEff index;
@@ -351,15 +331,11 @@ public abstract class Entity extends AbEntity {
 				}
 
 				effs[id] = eff.getEAnim(index);
-			}
-
-			if (t == HEAL) {
+			} else if (t == HEAL) {
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_HEAL : effas().A_E_HEAL;
 
 				effs[dire == -1 ? A_HEAL : A_E_HEAL] = eff.getEAnim(DefEff.DEF);
-			}
-
-			if (t == SHIELD_HIT) {
+			} else if (t == SHIELD_HIT) {
 				int id = dire == -1 ? A_DEMON_SHIELD : A_E_DEMON_SHIELD;
 
 				EffAnim<ShieldEff> eff = dire == -1 ? effas().A_DEMON_SHIELD : effas().A_E_DEMON_SHIELD;
@@ -370,9 +346,7 @@ public abstract class Entity extends AbEntity {
 				status[P_DEMONSHIELD][0] = effs[id].len();
 
 				CommonStatic.setSE(SE_SHIELD_HIT);
-			}
-
-			if (t == SHIELD_BROKEN) {
+			} else if (t == SHIELD_BROKEN) {
 				int id = dire == -1 ? A_DEMON_SHIELD : A_E_DEMON_SHIELD;
 
 				EffAnim<ShieldEff> eff = dire == -1 ? effas().A_DEMON_SHIELD : effas().A_E_DEMON_SHIELD;
@@ -381,9 +355,7 @@ public abstract class Entity extends AbEntity {
 				status[P_DEMONSHIELD][0] = effs[id].len();
 
 				CommonStatic.setSE(SE_SHIELD_BROKEN);
-			}
-
-			if (t == SHIELD_REGEN) {
+			} else if (t == SHIELD_REGEN) {
 				int id = dire == -1 ? A_DEMON_SHIELD : A_E_DEMON_SHIELD;
 
 				EffAnim<ShieldEff> eff = dire == -1 ? effas().A_DEMON_SHIELD : effas().A_E_DEMON_SHIELD;
@@ -392,9 +364,7 @@ public abstract class Entity extends AbEntity {
 				status[P_DEMONSHIELD][0] = effs[id].len();
 
 				CommonStatic.setSE(SE_SHIELD_REGEN);
-			}
-
-			if (t == SHIELD_BREAKER) {
+			} else if (t == SHIELD_BREAKER) {
 				int id = dire == -1 ? A_DEMON_SHIELD : A_E_DEMON_SHIELD;
 
 				EffAnim<ShieldEff> eff = dire == -1 ? effas().A_DEMON_SHIELD : effas().A_E_DEMON_SHIELD;
@@ -403,38 +373,40 @@ public abstract class Entity extends AbEntity {
 				status[P_DEMONSHIELD][0] = effs[id].len();
 
 				CommonStatic.setSE(SE_SHIELD_BREAKER);
-			}
-
-			if(t == P_COUNTER) {
+			} else if(t == P_COUNTER) {
 				int id = dire == -1 ? A_COUNTER : A_E_COUNTER;
 
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_COUNTER : effas().A_E_COUNTER;
 
 				effs[id] = eff.getEAnim(DefEff.DEF);
-			}
-
-			if(t == P_DMGCUT) {
+			} else if (t == P_DMGCUT) {
 				int id = dire == -1 ? A_DMGCUT : A_E_DMGCUT;
 
 				EffAnim<DefEff> eff = dire == -1 ? effas().A_DMGCUT : effas().A_E_DMGCUT;
 
 				effs[id] = eff.getEAnim(DefEff.DEF);
-			}
-
-			if(t == DMGCAP_FAIL) {
+			} else if (t == DMGCAP_FAIL) {
 				int id = dire == -1 ? A_DMGCAP : A_E_DMGCAP;
 
 				EffAnim<DmgCap> eff = dire == -1 ? effas().A_DMGCAP : effas().A_E_DMGCAP;
 
 				effs[id] = eff.getEAnim(DmgCap.FAIL);
-			}
-
-			if(t == DMGCAP_SUCCESS) {
+			} else if (t == DMGCAP_SUCCESS) {
 				int id = dire == -1 ? A_DMGCAP : A_E_DMGCAP;
 
 				EffAnim<DmgCap> eff = dire == -1 ? effas().A_DMGCAP : effas().A_E_DMGCAP;
 
 				effs[id] = eff.getEAnim(DmgCap.SUCCESS);
+			} else if (t == GUARD_HOLD) {
+				int id = A_E_GREEN_GUARD;
+				EffAnim<GuardEff> eff = effas().A_E_GUARD;
+				effs[id] = eff.getEAnim(GuardEff.NONE);
+				CommonStatic.setSE(SE_BARRIER_NON);
+			} else if (t == GUARD_BREAK) {
+				int id = A_E_GREEN_GUARD;
+				EffAnim<GuardEff> eff = effas().A_E_GUARD;
+				effs[id] = eff.getEAnim(GuardEff.BREAK);
+				CommonStatic.setSE(SE_BARRIER_ABI);
 			}
 		}
 
@@ -1724,7 +1696,10 @@ public abstract class Entity extends AbEntity {
 			}
 		}
 
-		CommonStatic.setSE(isBase ? SE_HIT_BASE : (basis.r.irDouble() < 0.5 ? SE_HIT_0 : SE_HIT_1));
+		if (!isBase)
+			CommonStatic.setSE((basis.r.irDouble() < 0.5 ? SE_HIT_0 : SE_HIT_1));
+		else if (basis.activeGuard == 1)
+			CommonStatic.setSE(SE_HIT_BASE);
 
 		damage += dmg;
 		zx.damaged(atk);
@@ -2139,8 +2114,8 @@ public abstract class Entity extends AbEntity {
 		}
 		if (!isBase && damage > 0 && kbTime <= 0 && kbTime != -1 && (ext <= damage * hb || health < damage))
 			interrupt(INT_HB, KB_DIS[INT_HB]);
-		if (isBase && basis.activeGuard) {
-
+		if (damage > 0 && isBase && basis.activeGuard == 1) {
+			anim.getEff(GUARD_HOLD);
 		} else {
 			health -= damage;
 		}

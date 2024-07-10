@@ -55,7 +55,7 @@ public class StageBasis extends BattleObj {
 	public int[] selectedUnit = {-1, -1};
 	public final float boss_spawn;
 	public final int[] shakeCoolDown = {0, 0};
-	public boolean activeGuard = false;
+	public int activeGuard = -1;
 
 	public float siz;
 	public int work_lv, money, maxMoney, cannon, maxCannon, upgradeCost, max_num, pos;
@@ -168,6 +168,9 @@ public class StageBasis extends BattleObj {
 
 		isOneLineup = oneLine;
 		this.buttonDelayOn = buttonDelayOn;
+
+		if (est.s.bossGuard)
+			activeGuard = 0;
 	}
 
 	/**
@@ -585,6 +588,8 @@ public class StageBasis extends BattleObj {
 
 				if (e != null) {
 					e.added(1, e.mark >= 1 ? boss_spawn : 700f);
+					if (e.mark >= 1 && activeGuard == 0)
+						activeGuard = 1;
 
 					le.add(e);
 					le.sort(Comparator.comparingInt(en -> en.layer));
