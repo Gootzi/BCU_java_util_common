@@ -38,7 +38,7 @@ public class ECastle extends AbEntity {
 	}
 
 	@Override
-	public void damaged(AttackAb atk) { // todo (battle): adjust damage calc to allow base damage immediately when green barrier breaks
+	public void damaged(AttackAb atk) {
 		if (isEnemy && sb.activeGuard == 1) {
 			if (guard != null)
 				return;
