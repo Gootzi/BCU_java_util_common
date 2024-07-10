@@ -932,4 +932,16 @@ public class StageBasis extends BattleObj {
 		}
 		bg = newBg;
 	}
+
+	public void checkGuard() {
+		if (activeGuard != 1)
+			return;
+		for (Entity e : le) {
+			if (e instanceof EEnemy && ((EEnemy) e).mark >= 1 && e.anim.dead == -1)
+				return;
+		}
+		activeGuard = 0;
+		if (ebase instanceof ECastle)
+			((ECastle) ebase).guardBreak();
+	}
 }

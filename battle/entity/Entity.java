@@ -2090,6 +2090,7 @@ public abstract class Entity extends AbEntity {
 		kbTime = -1;
 		atkm.stopAtk();
 		anim.kill();
+		basis.checkGuard();
 	}
 
 	/**
