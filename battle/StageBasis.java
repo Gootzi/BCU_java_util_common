@@ -943,5 +943,7 @@ public class StageBasis extends BattleObj {
 		activeGuard = 0;
 		if (ebase instanceof ECastle)
 			((ECastle) ebase).guardBreak();
+		else
+			((EEnemy) ebase).anim.getEff(Data.GUARD_BREAK);
 	}
 }
