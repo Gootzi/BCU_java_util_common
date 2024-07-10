@@ -71,7 +71,9 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 			sca.y = 1f * args[9] * v / model.ints[0];
 
 			gsca = v;
-		} else if (m == 9)
+		} else if (m == 53)
+			gsca = v;
+		else if (m == 9)
 			sca.x = 1f * args[8] * v / model.ints[0];
 		else if (m == 10)
 			sca.y = 1f * args[9] * v / model.ints[0];
@@ -139,6 +141,8 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 			return extendX;
 		else if (m == 52)
 			return extendY;
+		else if (m == 53)
+			return gsca;
 		else
 			System.out.println("EPart modification can be: " + m);
 		return -1;
