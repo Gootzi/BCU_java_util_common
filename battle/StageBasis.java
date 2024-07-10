@@ -589,7 +589,7 @@ public class StageBasis extends BattleObj {
 				if (e != null) {
 					e.added(1, e.mark >= 1 ? boss_spawn : 700f);
 					if (e.mark >= 1 && activeGuard == 0)
-						activeGuard = 1;
+						activeGuard = 1; // todo (battle): fix so once base reaches 99%, if boss is also spawn on 99% yet still clogged by other enemies, it'll still trigger barrier
 
 					le.add(e);
 					le.sort(Comparator.comparingInt(en -> en.layer));
