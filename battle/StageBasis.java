@@ -596,14 +596,15 @@ public class StageBasis extends BattleObj {
 			ubase.preUpdate();
 			ubase.update();
 
+			if (activeGuard == 0 && est.hasBoss(true))
+				activeGuard = 1;
+
 			int allow = st.max - entityCount(1);
 			if (respawnTime <= 0 && active && allow > 0) {
 				EEnemy e = est.allow();
 
 				if (e != null) {
 					e.added(1, e.mark >= 1 ? boss_spawn : 700f);
-					if (e.mark >= 1 && activeGuard == 0)
-						activeGuard = 1; // todo (battle): fix so once base reaches 99%, if boss is also spawn on 99% yet still clogged by other enemies, it'll still trigger barrier
 
 					le.add(e);
 					le.sort(Comparator.comparingInt(en -> en.layer));
@@ -717,7 +718,7 @@ public class StageBasis extends BattleObj {
 		if(s_stop == 0 || (ebase.getAbi() & AB_TIMEI) != 0) {
 			ebase.postUpdate();
 
-			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss()) {
+			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss(false)) {
 				lethal = true;
 				ebase.health = 1;
 			}
@@ -953,12 +954,14 @@ public class StageBasis extends BattleObj {
 	}
 
 	public void checkGuard() {
-		if (activeGuard != 1)
+		if (activeGuard != 1 || est.hasBoss(true))
 			return;
+
 		for (Entity e : le) {
 			if (e instanceof EEnemy && ((EEnemy) e).mark >= 1 && e.anim.dead == -1)
 				return;
 		}
+
 		activeGuard = 0;
 		if (ebase instanceof ECastle)
 			((ECastle) ebase).guardBreak();
