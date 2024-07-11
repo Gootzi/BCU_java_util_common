@@ -381,9 +381,11 @@ public class Treasure extends Data {
 	 * ignores research and treasure data
 	 */
 	public int getFinResGlobal(int ori) {
+		if (ori <= 60)
+			return ori;
 		float research = (tech[LV_RES] - 1) * 6 + trea[T_RES] * 0.3f;
 		float deduction = (float) Math.floor(research * b.getInc(C_RESP) / 100.0);
-		return (int) Math.max(1, ori - deduction);
+		return (int) Math.max(60, ori - deduction);
 	}
 
 	/**
