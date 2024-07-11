@@ -28,4 +28,12 @@ public class StageLimit extends Data implements BattleStatic {
         this.globalCooldown = globalCooldown;
         this.bannedCatCombo.addAll(bannedCombo);
     }
+
+    public StageLimit clone() {
+        StageLimit sl = new StageLimit();
+        sl.maxMoney = maxMoney;
+        sl.globalCooldown = globalCooldown;
+        sl.bannedCatCombo.addAll(bannedCatCombo);
+        return sl;
+    }
 }
