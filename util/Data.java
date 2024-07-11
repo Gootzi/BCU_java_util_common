@@ -1377,6 +1377,8 @@ public class Data {
 	public static final byte SHIELD_BREAKER = -11;
 	public static final byte DMGCAP_FAIL = -12;
 	public static final byte DMGCAP_SUCCESS = -13;
+	public static final byte GUARD_HOLD = -14;
+	public static final byte GUARD_BREAK = -15;
 
 	// Combo index
 	public static final byte C_ATK = 0;
@@ -1473,8 +1475,9 @@ public class Data {
 	public static final byte A_E_DMGCUT = 63;
 	public static final byte A_DMGCAP = 64;
 	public static final byte A_E_DMGCAP = 65;
+	public static final byte A_E_GREEN_GUARD = 66;
 	public static final byte[] A_POIS = { A_POI0, A_POI1, A_POI2, A_POI3, A_POI4, A_POI5, A_POI6, A_POI7 };
-	public static final byte A_TOT = 66;
+	public static final byte A_TOT = 67;
 
 	// atk type index used in filter page
 	public static final byte ATK_SINGLE = 0;

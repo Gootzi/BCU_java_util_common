@@ -6,6 +6,7 @@ import common.battle.StageBasis;
 import common.battle.attack.AttackAb;
 import common.battle.attack.AttackVolcano;
 import common.util.anim.EAnimD;
+import common.util.pack.EffAnim;
 import common.util.pack.EffAnim.DefEff;
 import common.util.unit.Trait;
 
@@ -19,21 +20,33 @@ public class ECastle extends AbEntity {
 	public int hit = 0;
 
 	public EAnimD<DefEff> smoke;
+	public EAnimD<EffAnim.GuardEff> guard;
 	public int smokeLayer = -1;
 	public int smokeX = -1;
+	public boolean isEnemy;
 
 	public ECastle(StageBasis b) {
 		super(b.st.trail ? Integer.MAX_VALUE : b.st.health);
 		sb = b;
+		isEnemy = true;
 	}
 
-	public ECastle(StageBasis xb, BasisLU b) {
-		super(b.t().getBaseHealth());
-		sb = xb;
+	public ECastle(StageBasis b, BasisLU lu) {
+		super(lu.t().getBaseHealth());
+		sb = b;
+		isEnemy = false;
 	}
 
 	@Override
 	public void damaged(AttackAb atk) {
+		if (isEnemy && sb.activeGuard == 1) {
+			if (guard != null)
+				return;
+			EffAnim<EffAnim.GuardEff> eff = effas().A_E_GUARD;
+			guard = eff.getEAnim(EffAnim.GuardEff.NONE);
+			CommonStatic.setSE(SE_BARRIER_NON);
+			return;
+		}
 		hit = 2;
 
 		if(atk.isLongAtk || atk instanceof AttackVolcano)
@@ -101,15 +114,7 @@ public class ECastle extends AbEntity {
 
 	@Override
 	public void update() {
-		if(smoke != null) {
-			if(smoke.done()) {
-				smoke = null;
-				smokeLayer = -1;
-				smokeX = -1;
-			} else {
-				smoke.update(false);
-			}
-		}
+		updateAnimation();
 
 		if (hit > 0)
 			hit--;
@@ -127,6 +132,12 @@ public class ECastle extends AbEntity {
 				smoke.update(false);
 			}
 		}
+		if (guard != null) {
+			if (guard.done())
+				guard = null;
+			else
+				guard.update(false);
+		}
 	}
 
 	@Override
@@ -134,4 +145,9 @@ public class ECastle extends AbEntity {
 
 	}
 
+	public void guardBreak() {
+		EffAnim<EffAnim.GuardEff> eff = effas().A_E_GUARD;
+		guard = eff.getEAnim(EffAnim.GuardEff.BREAK);
+		CommonStatic.setSE(SE_BARRIER_ABI);
+	}
 }
