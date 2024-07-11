@@ -372,8 +372,18 @@ public class Treasure extends Data {
 	 */
 	public int getFinRes(int ori) {
 		float research = (tech[LV_RES] - 1) * 6 + trea[T_RES] * 0.3f;
-		float deduction = research + (float) Math.floor(research * b.getInc(C_RESP) / 100);
+		float deduction = (float) Math.floor(research * b.getInc(C_RESP) / 100);
 		return (int) Math.max(60, ori - deduction);
+	}
+
+	/**
+	 * get processed cat cool down time w/ global restriction
+	 * ignores research and treasure data
+	 */
+	public int getFinResGlobal(int ori) {
+		float research = (tech[LV_RES] - 1) * 6 + trea[T_RES] * 0.3f;
+		float deduction = (float) Math.floor(research * b.getInc(C_RESP) / 100.0);
+		return (int) Math.max(1, ori - deduction);
 	}
 
 	/**

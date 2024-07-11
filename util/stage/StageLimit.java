@@ -7,20 +7,17 @@ import common.util.Data;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @JsonClass
 public class StageLimit extends Data implements BattleStatic {
     @JsonField
-    public int maxMoney;
+    public int maxMoney = 0;
     @JsonField
-    public int globalCooldown;
+    public int globalCooldown = 0;
     @JsonField(generic = Integer.class)
-    public Set<Integer> bannedCatCombo = new HashSet<>();
+    public HashSet<Integer> bannedCatCombo = new HashSet<>();
 
     public StageLimit() {
-        maxMoney = 0;
-        globalCooldown = 0;
     }
 
     public StageLimit(int maxMoney, int globalCooldown, List<Integer> bannedCombo) {

@@ -137,8 +137,22 @@ public class StageBasis extends BattleObj {
 		max_num = max <= 0 ? 50 : max;
 		maxCannon = bas.t().CanonTime(sttime);
 
-		work_lv = 1 + bas.getInc(C_M_LV);
-		money = bas.getInc(C_M_INI) * 100;
+		int bank = maxBankLimit();
+		int cd = globalCdLimit();
+		if (bank > 0 || cd > 0) {
+			for (int i = 0; i < 2; i++)
+				for (int j = 0; j < 5; j++)
+					elu.get(i, j);
+		}
+		if (bank > 0) {
+			work_lv = 8;
+			money = bank * 100;
+		} else {
+			work_lv = 1 + bas.getInc(C_M_LV);
+			money = bas.getInc(C_M_INI) * 100;
+		}
+
+
 		cannon = maxCannon * bas.getInc(C_C_INI) / 100;
 		canon = new Cannon(this, nyc[0], nyc[1], nyc[2]);
 		conf = ints;
@@ -634,8 +648,13 @@ public class StageBasis extends BattleObj {
 			}
 			if (active) {
 				cannon++;
-				maxMoney = b.t().getMaxMon(work_lv);
-				money += b.t().getMonInc(work_lv) * (b.getInc(C_M_INC) / 100 + 1);
+				int bank = maxBankLimit();
+				if (bank > 0) {
+					maxMoney = bank * 100;
+				} else {
+					maxMoney = b.t().getMaxMon(work_lv);
+					money += b.t().getMonInc(work_lv) * (b.getInc(C_M_INC) / 100 + 1);
+				}
 			}
 
 			if (active)
@@ -945,5 +964,19 @@ public class StageBasis extends BattleObj {
 			((ECastle) ebase).guardBreak();
 		else
 			((EEnemy) ebase).anim.getEff(Data.GUARD_BREAK);
+	}
+
+	public int maxBankLimit() {
+		if (st.getCont().stageLimit == null)
+			return 0;
+		else
+			return st.getCont().stageLimit.maxMoney;
+	}
+
+	public int globalCdLimit() {
+		if (st.getCont().stageLimit == null)
+			return 0;
+		else
+			return st.getCont().stageLimit.globalCooldown;
 	}
 }
