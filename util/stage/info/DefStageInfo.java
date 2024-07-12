@@ -8,6 +8,8 @@ import common.util.stage.MapColc;
 import common.util.stage.Music;
 import common.util.stage.Stage;
 import common.util.stage.StageMap;
+import page.MainLocale;
+import page.Page;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -128,6 +130,15 @@ public class DefStageInfo implements StageInfo {
 
         if (st.getCont().info.cantUseGoldCPU) {
             ans.append("<br> You can't use gold CPU in this stage");
+        }
+
+        if (st.getCont().stageLimit != null && !st.getCont().stageLimit.bannedCatCombo.isEmpty()) {
+            String[] comboData = new String[st.getCont().stageLimit.bannedCatCombo.size()];
+            ans.append("<br> Banned combos: ");
+            int i = 0;
+            for (int id : st.getCont().stageLimit.bannedCatCombo)
+                comboData[i++] = Page.get(MainLocale.UTIL, "nb" + id);
+            ans.append(String.join(", ", comboData));
         }
 
         ans.append("<br><br> EX stage existing : ")
