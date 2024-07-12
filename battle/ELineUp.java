@@ -21,8 +21,8 @@ public class ELineUp extends BattleObj {
 				}
 				price[i][j] = (int) (lu.efs[i][j].getPrice(sb.st.getCont().price) * 100);
 				maxC[i][j] = sb.globalCdLimit() > 0
-						? sb.b.t().getFinResGlobal(sb.globalCdLimit())
-						: sb.b.t().getFinRes(lu.efs[i][j].du.getRespawn());
+						? sb.b.t().getFinResGlobal(sb.globalCdLimit(), sb.isBanned(C_RESP))
+						: sb.b.t().getFinRes(lu.efs[i][j].du.getRespawn(), sb.isBanned(C_RESP));
 				if (lim != null && ((lim.line == 1 && i == 1) || lim.unusable(lu.efs[i][j].du, sb.st.getCont().price)))
 					price[i][j] = -1;
 			}
