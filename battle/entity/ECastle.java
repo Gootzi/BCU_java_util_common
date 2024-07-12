@@ -32,7 +32,7 @@ public class ECastle extends AbEntity {
 	}
 
 	public ECastle(StageBasis b, BasisLU lu) {
-		super(lu.t().getBaseHealth());
+		super(lu.t().getBaseHealth(b.isBanned(C_BASE)));
 		sb = b;
 		isEnemy = false;
 	}

@@ -55,7 +55,6 @@ public abstract class AtkModelEntity extends AtkModelAb {
 		acs = new BattleObj[raw.length + 5];
 		for (int i = 0; i < raw.length; i++) {
 			atks[i] = (int) (Math.round(raw[i][0] * d0) * d1);
-			atks[i] = atks[i];
 			abis[i] = raw[i][2];
 			act[i] = data.getAtkModel(i).loopCount();
 			acs[i] = new BattleObj();
@@ -80,11 +79,12 @@ public abstract class AtkModelEntity extends AtkModelAb {
 		acs = new BattleObj[raw.length + 5];
 		for (int i = 0; i < raw.length; i++) {
 			atks[i] = (int) (Math.round(raw[i][0] * d1) * d0);
+			double com = ent.basis.isBanned(Data.C_ATK) ? 1.0 : (1 + ent.basis.b.getInc(Data.C_ATK) * 0.01);
 
 			if (pc != null && lv != null && lv.getTalents().length == pc.max.length)
-				atks[i] = (int) Math.round((int) (pc.getAtkMultiplication(lv.getTalents()) * atks[i]) * (1 + ent.basis.b.getInc(Data.C_ATK) * 0.01));
+				atks[i] = (int) Math.round((int) (pc.getAtkMultiplication(lv.getTalents()) * atks[i]) * com);
 			else
-				atks[i] = (int) Math.round(atks[i] * (1 + ent.basis.b.getInc(Data.C_ATK) * 0.01));
+				atks[i] = (int) Math.round(atks[i] * com);
 			abis[i] = raw[i][2];
 			act[i] = data.getAtkModel(i).loopCount();
 			acs[i] = new BattleObj();

@@ -248,6 +248,9 @@ public class Stage extends Data
 			ans.mus1 = mus1.clone();
 		ans.bgh = bgh;
 		ans.mush = mush;
+		ans.minSpawn = minSpawn;
+		ans.maxSpawn = maxSpawn;
+		ans.bossGuard = bossGuard;
 		return ans;
 	}
 

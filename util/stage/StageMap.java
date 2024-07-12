@@ -160,8 +160,12 @@ public class StageMap extends Data implements BasedCopable<StageMap, MapColc>,
 		sm.names.put(toString());
 
 		sm.stars = stars.clone();
+		sm.price = price;
+		sm.stageLimit = stageLimit != null ? stageLimit.clone() : null;
+
 		for (Stage st : list)
 			sm.add(st.copy(sm));
+
 		return sm;
 	}
 
