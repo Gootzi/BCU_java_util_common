@@ -89,7 +89,7 @@ public class DefStageInfo implements StageInfo {
     }
 
     @Override
-    public boolean exConnection() {
+    public boolean hasExConnection() {
         return exConnection;
     }
 
@@ -103,6 +103,51 @@ public class DefStageInfo implements StageInfo {
         if (exConnection)
             return new float[]{-1, exChance};
         return exChances;
+    }
+
+    @Override
+    public int getExChance() {
+        return exChance;
+    }
+
+    @Override
+    public int getExMapId() {
+        return exMapID;
+    }
+
+    @Override
+    public int getExStageIdMin() {
+        return exStageIDMin;
+    }
+
+    @Override
+    public int getExStageIdMax() {
+        return exStageIDMax;
+    }
+
+    @Override
+    public Stage getStage() {
+        return st;
+    }
+
+    @Override
+    public int getEnergy() {
+        return energy;
+    }
+
+    @Override
+    public int getXp() {
+        return xp;
+    }
+
+    @Override
+    public int[][] getDrop() {
+        return drop;
+    }
+
+    @Override
+    public int[][] getTime() {
+        return time;
     }
 
     public List<String> analyzeRewardChance() {

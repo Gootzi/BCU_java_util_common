@@ -43,7 +43,7 @@ public class CustomStageInfo implements StageInfo {
     }
 
     @Override
-    public boolean exConnection() {
+    public boolean hasExConnection() {
         return false;
     }
 
@@ -59,6 +59,51 @@ public class CustomStageInfo implements StageInfo {
             FChances[i] = chances.get(i);
 
         return FChances;
+    }
+
+    @Override
+    public int getExChance() {
+        return 0;
+    }
+
+    @Override
+    public int getExMapId() {
+        return 0;
+    }
+
+    @Override
+    public int getExStageIdMin() {
+        return 0;
+    }
+
+    @Override
+    public int getExStageIdMax() {
+        return 0;
+    }
+
+    @Override
+    public Stage getStage() {
+        return st;
+    }
+
+    @Override
+    public int getEnergy() {
+        return 0;
+    }
+
+    @Override
+    public int getXp() {
+        return 0;
+    }
+
+    @Override
+    public int[][] getDrop() {
+        return null;
+    }
+
+    @Override
+    public int[][] getTime() {
+        return null;
     }
 
     public void remove(Stage s) {
