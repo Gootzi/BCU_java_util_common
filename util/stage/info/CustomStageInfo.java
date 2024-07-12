@@ -43,23 +43,6 @@ public class CustomStageInfo implements StageInfo {
     }
 
     @Override
-    public String getHTML() {
-        if (stages.size() == 0)
-            return null;
-        StringBuilder ans = new StringBuilder("<html><table><tr><th>List of Followup Stages:</th></tr>");
-        for (int i = 0; i < stages.size(); i++)
-            ans.append("<tr><td>")
-                    .append(stages.get(i).getCont().toString())
-                    .append(" - ")
-                    .append(stages.get(i).toString())
-                    .append("</td><td>")
-                    .append(df.format(chances.get(i)))
-                    .append("%</td></tr>");
-
-        return ans.toString();
-    }
-
-    @Override
     public boolean exConnection() {
         return false;
     }
