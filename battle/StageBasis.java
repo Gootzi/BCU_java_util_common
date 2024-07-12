@@ -959,7 +959,10 @@ public class StageBasis extends BattleObj {
 	}
 
 	public boolean isBanned(byte comboId) {
-		return st.getCont().stageLimit.bannedCatCombo.contains((int) comboId);
+		if (st.getCont().stageLimit == null)
+			return false;
+		else
+			return st.getCont().stageLimit.bannedCatCombo.contains((int) comboId);
 	}
 
 	public void checkGuard() {
