@@ -69,8 +69,6 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 		else if (m == 8) {
 			sca.x = 1f * args[8] * v / model.ints[0];
 			sca.y = 1f * args[9] * v / model.ints[0];
-
-			gsca = v;
 		} else if (m == 53)
 			gsca = v;
 		else if (m == 9)
@@ -272,9 +270,9 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 		float mi = 1f / model.ints[0];
 
 		if (fa == null)
-			return P.newP(sca).times(mi);
+			return P.newP(sca).times(gsca * mi * mi);
 
-		return fa.getSize().times(sca).times(mi);
+		return fa.getSize().times(sca).times(gsca * mi * mi);
 	}
 
 	private P getBaseSize(boolean parent) {
