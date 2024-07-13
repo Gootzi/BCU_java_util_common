@@ -22,7 +22,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -240,6 +239,11 @@ public class CommonStatic {
 
 			Locale(String localeCode) {
 				code = localeCode;
+			}
+
+			@Override
+			public String toString() {
+				return code;
 			}
 		}
 
