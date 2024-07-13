@@ -137,10 +137,23 @@ public abstract class Source {
 				this.id = "_mapped_" + this.id;
 			}
 
-			UserPack pack = (UserPack) UserPack.getPack(zip instanceof Workspace ? ((Workspace) zip).id : this.pack);
+			UserPack userpack = (UserPack) UserPack.getPack(zip instanceof Workspace ? ((Workspace) zip).id : this.pack);
 
-			if (UserProfile.isOlderPack(pack, "0.6.9.1"))
+			if (UserProfile.isOlderPack(userpack, "0.6.9.1"))
 				this.base = BasePath.ANIM;
+
+			if (UserProfile.isOlderPack(userpack, "0.7.8.0") && pack.equals("_local")) {
+				AnimCE anim = (AnimCE) getAnim();
+				anim.anims = anim.loader.getMA();
+                for (MaAnim maanim : anim.anims) {
+                    for (Part line : maanim.parts) {
+                        if (line.ints[1] == 8)
+                            line.ints[1] = 53;
+                    }
+                }
+				anim.unSave("scale to new scale");
+                anim.unload();
+            }
 		}
 
 	}
@@ -196,8 +209,15 @@ public abstract class Source {
 		@Override
 		public MaAnim[] getMA() {
 			MaAnim[] ans = new MaAnim[getBaseMA().length];
-			for (int i = 0; i < getBaseMA().length; i++)
-				ans[i] = MaAnim.newIns(loader.loadFile(id.base, id, getBaseMA()[i]));
+			boolean isOld = !id.pack.equals("_local") && UserProfile.isOlderPack(UserProfile.getUserPack(id.pack), "0.7.8.0");
+			for (int i = 0; i < getBaseMA().length; i++) {
+				MaAnim maa = MaAnim.newIns(loader.loadFile(id.base, id, getBaseMA()[i]));
+				if (isOld)
+					for (Part line : maa.parts)
+						if (line.ints[1] == 8)
+							line.ints[1] = 53;
+				ans[i] = maa;
+			}
 			return ans;
 		}
 

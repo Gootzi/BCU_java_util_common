@@ -135,11 +135,27 @@ public class StageBasis extends BattleObj {
 		}
 		int max = est.lim != null ? est.lim.num : 50;
 		max_num = max <= 0 ? 50 : max;
-		maxCannon = bas.t().CanonTime(sttime);
+		maxCannon = bas.t().CanonTime(sttime, isBanned(C_C_SPE));
 
-		work_lv = 1 + bas.getInc(C_M_LV);
-		money = bas.getInc(C_M_INI) * 100;
-		cannon = maxCannon * bas.getInc(C_C_INI) / 100;
+		int bank = maxBankLimit();
+		int cd = globalCdLimit();
+		if (bank > 0 || cd > 0) {
+			for (int i = 0; i < 2; i++)
+				for (int j = 0; j < 5; j++)
+					elu.get(i, j);
+		}
+		if (bank > 0) {
+			work_lv = 8;
+			money = bank * 100;
+		} else {
+			work_lv = 1;
+			if (!isBanned(C_M_LV))
+				work_lv += bas.getInc(C_M_LV);
+			if (!isBanned(C_M_INI))
+				money = bas.getInc(C_M_INI) * 100;
+		}
+
+		cannon = maxCannon * (isBanned(C_C_INI) ? 0 : bas.getInc(C_C_INI)) / 100;
 		canon = new Cannon(this, nyc[0], nyc[1], nyc[2]);
 		conf = ints;
 
@@ -342,7 +358,7 @@ public class StageBasis extends BattleObj {
 			money -= upgradeCost;
 			work_lv++;
 			upgradeCost = b.t().getLvCost(work_lv);
-			maxMoney = b.t().getMaxMon(work_lv);
+			maxMoney = b.t().getMaxMon(work_lv, isBanned(C_M_MAX));
 			return true;
 		}
 		CommonStatic.setSE(SE_SPEND_FAIL);
@@ -582,14 +598,15 @@ public class StageBasis extends BattleObj {
 			ubase.preUpdate();
 			ubase.update();
 
+			if (activeGuard == 0 && est.hasBoss(true))
+				activeGuard = 1;
+
 			int allow = st.max - entityCount(1);
 			if (respawnTime <= 0 && active && allow > 0) {
 				EEnemy e = est.allow();
 
 				if (e != null) {
 					e.added(1, e.mark >= 1 ? boss_spawn : 700f);
-					if (e.mark >= 1 && activeGuard == 0)
-						activeGuard = 1; // todo (battle): fix so once base reaches 99%, if boss is also spawn on 99% yet still clogged by other enemies, it'll still trigger barrier
 
 					le.add(e);
 					le.sort(Comparator.comparingInt(en -> en.layer));
@@ -634,8 +651,16 @@ public class StageBasis extends BattleObj {
 			}
 			if (active) {
 				cannon++;
-				maxMoney = b.t().getMaxMon(work_lv);
-				money += b.t().getMonInc(work_lv) * (b.getInc(C_M_INC) / 100 + 1);
+				int bank = maxBankLimit();
+				if (bank > 0) {
+					maxMoney = bank * 100;
+				} else {
+					maxMoney = b.t().getMaxMon(work_lv, isBanned(C_M_MAX));
+					int mon = b.t().getMonInc(work_lv);
+					if (!isBanned(C_M_INC))
+						mon *= (b.getInc(C_M_INC) / 100 + 1);
+					money += mon;
+				}
 			}
 
 			if (active)
@@ -698,7 +723,7 @@ public class StageBasis extends BattleObj {
 		if(s_stop == 0 || (ebase.getAbi() & AB_TIMEI) != 0) {
 			ebase.postUpdate();
 
-			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss()) {
+			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss(false)) {
 				lethal = true;
 				ebase.health = 1;
 			}
@@ -933,17 +958,40 @@ public class StageBasis extends BattleObj {
 		bg = newBg;
 	}
 
+	public boolean isBanned(byte comboId) {
+		if (st.getCont().stageLimit == null)
+			return false;
+		else
+			return st.getCont().stageLimit.bannedCatCombo.contains((int) comboId);
+	}
+
 	public void checkGuard() {
-		if (activeGuard != 1)
+		if (activeGuard != 1 || est.hasBoss(true))
 			return;
+
 		for (Entity e : le) {
 			if (e instanceof EEnemy && ((EEnemy) e).mark >= 1 && e.anim.dead == -1)
 				return;
 		}
+
 		activeGuard = 0;
 		if (ebase instanceof ECastle)
 			((ECastle) ebase).guardBreak();
 		else
 			((EEnemy) ebase).anim.getEff(Data.GUARD_BREAK);
+	}
+
+	public int maxBankLimit() {
+		if (st.getCont().stageLimit == null)
+			return 0;
+		else
+			return st.getCont().stageLimit.maxMoney;
+	}
+
+	public int globalCdLimit() {
+		if (st.getCont().stageLimit == null)
+			return 0;
+		else
+			return st.getCont().stageLimit.globalCooldown;
 	}
 }

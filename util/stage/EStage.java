@@ -136,11 +136,11 @@ public class EStage extends BattleObj {
 	/**
 	 * return true if there is still boss in the base
 	 */
-	public boolean hasBoss() {
+	public boolean hasBoss(boolean checkHP) {
 		for (int i = 0; i < rem.length; i++) {
 			Line data = s.data.getSimple(i);
 
-			if (data.boss == 1 && num[i] > 0)
+			if (data.boss == 1 && num[i] > 0 && (!checkHP || inHealth(data, i)))
 				return true;
 		}
 
