@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 
 @JsonClass(read = JsonClass.RType.FILL)
 public class MultiLangData extends Data {
-    @JsonField(generic = {Integer.class, String.class})
+    @JsonField(generic = {Lang.Locale.class, String.class})
     private final LinkedHashMap<Lang.Locale, String> dat = new LinkedHashMap<>();
 
     @JsonClass.JCConstructor
@@ -104,5 +104,5 @@ public class MultiLangData extends Data {
             ans.dat.put(lang, dat.get(lang));
 
         return ans;
-    };
+    }
 }
