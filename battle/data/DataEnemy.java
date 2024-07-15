@@ -129,6 +129,8 @@ public class DataEnemy extends DefaultData implements MaskEnemy {
 		proc.WARP.dis_0 = ints[67] / 4;
 		proc.WARP.dis_1 = ints[68] / 4;
 		star = ints[69];
+		if (ints[70] == 1)
+			proc.IMUWARP.mult = 100;
 		if (ints[71] == 1)
 			//EVA
 			traits.add(BCTraits.get(TRAIT_EVA));
