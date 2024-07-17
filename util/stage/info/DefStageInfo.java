@@ -40,8 +40,10 @@ public class DefStageInfo implements StageInfo {
         energy = data[0];
         xp = data[1];
         s.mus0 = Identifier.parseInt(data[2], Music.class);
-        s.mush = data[3];
-        s.mus1 = Identifier.parseInt(data[4], Music.class);
+        if (data[3] != 0 && data[3] != 100) {
+            s.mush = data[3];
+            s.mus1 = Identifier.parseInt(data[4], Music.class);
+        }
 
         once = data[data.length - 1];
         boolean isTime = data.length > 15;
