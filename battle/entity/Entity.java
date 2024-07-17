@@ -1634,16 +1634,11 @@ public abstract class Entity extends AbEntity {
 		if (!shieldContinue) {
 			if (atk.getProc().SHIELDBREAK.prob > 0) {
 				currentShield = 0;
-
 				anim.getEff(SHIELD_BREAKER);
-
 				shieldContinue = true;
 			} else if (dmg >= currentShield) {
 				currentShield = 0;
-
 				anim.getEff(SHIELD_BROKEN);
-
-				cancelAllProc();
 			} else {
 				currentShield -= dmg;
 
@@ -1651,8 +1646,6 @@ public abstract class Entity extends AbEntity {
 					currentShield = maxCurrentShield;
 
 				anim.getEff(SHIELD_HIT);
-
-				cancelAllProc();
 			}
 		}
 
