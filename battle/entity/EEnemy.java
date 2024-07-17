@@ -47,7 +47,7 @@ public class EEnemy extends Entity {
 	public void kill(KillMode atk) {
 		super.kill(atk);
 
-		if (!basis.st.trail && atk == KillMode.NORMAL && basis.maxBankLimit() == 0) {
+		if (!basis.st.trail && atk == KillMode.NORMAL && basis.maxBankLimit() <= 0) {
 			float mul = basis.b.t().getDropMulti(basis.isBanned(Data.C_MEAR)) * (1 + (status[P_BOUNTY][0] / 100f));
 			basis.money = (int) (basis.money + mul * ((MaskEnemy) data).getDrop());
 		}
