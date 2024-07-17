@@ -63,7 +63,7 @@ public class EEnemy extends Entity {
 			ans = (int) ((float) ans * atk.getProc().MINIVOLC.mult / 100.0);
 		}
 
-		if (atk.model instanceof AtkModelUnit && status[P_CURSE][0] == 0) {
+		if (atk.model instanceof AtkModelUnit && ((AtkModelUnit) atk.model).e.status[P_CURSE][0] == 0) {
 			ArrayList<Trait> sharedTraits = new ArrayList<>(atk.trait);
 
 			sharedTraits.retainAll(traits);
