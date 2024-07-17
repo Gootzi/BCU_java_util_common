@@ -16,10 +16,7 @@ public class Part extends Data implements Cloneable, Comparable<Part> {
 	public int[][] moves;
 
 	public Part() {
-		ints = new int[] { 0, 5, -1, 0, 0 };
-		name = "";
-		n = 0;
-		moves = new int[0][];
+		this(0, 5);
 	}
 
 	public Part(int id, int modif) {
