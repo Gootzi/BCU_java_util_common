@@ -142,7 +142,7 @@ public class EStage extends BattleObj {
 		for (int i = 0; i < rem.length; i++) {
 			Line data = s.data.getSimple(i);
 
-			if (data.boss == 1 && num[i] > 0 && (!checkHP || inHealth(data, i)))
+			if (data.boss >= 1 && num[i] > 0 && (!checkHP || inHealth(data, i)))
 				return true;
 		}
 
