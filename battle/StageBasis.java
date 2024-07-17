@@ -735,7 +735,7 @@ public class StageBasis extends BattleObj {
 			// ubase.update();
 			// ubase.update2();
 
-			if (activeGuard == 0 && est.hasBoss(true))
+			if (activeGuard == 0 && est.hasBoss(true, false))
 				activeGuard = 1;
 
 			int allow = st.max - entityCount(1);
@@ -863,7 +863,7 @@ public class StageBasis extends BattleObj {
 		if(s_stop == 0 || (ebase.getAbi() & AB_TIMEI) != 0) {
 			ebase.postUpdate();
 
-			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss(false)) {
+			if (!lethal && ebase instanceof ECastle && ebase.health <= 0 && est.hasBoss(false, true)) {
 				lethal = true;
 				ebase.health = 1;
 			}
@@ -1151,7 +1151,7 @@ public class StageBasis extends BattleObj {
 	}
 
 	public void checkGuard() {
-		if (activeGuard != 1 || est.hasBoss(true))
+		if (activeGuard != 1 || est.hasBoss(true, false))
 			return;
 
 		for (Entity e : le) {
