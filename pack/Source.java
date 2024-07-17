@@ -217,7 +217,14 @@ public abstract class Source {
 
 		@Override
 		public MaModel getMM() {
-			return MaModel.newIns(loader.loadFile(id.base, id, MM));
+			MaModel model = MaModel.newIns(loader.loadFile(id.base, id, MM));
+			if (model.confs.length <= 1) {
+				int[][] newConfs = new int[2][6];
+				if (model.confs.length == 1)
+					newConfs[0] = model.confs[0];
+				model.confs = newConfs;
+			}
+			return model;
 		}
 
 		@Override
