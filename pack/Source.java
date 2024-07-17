@@ -210,14 +210,8 @@ public abstract class Source {
 		public MaAnim[] getMA() {
 			MaAnim[] ans = new MaAnim[getBaseMA().length];
 			boolean isOld = !id.pack.equals("_local") && UserProfile.isOlderPack(UserProfile.getUserPack(id.pack), "0.7.8.0");
-			for (int i = 0; i < getBaseMA().length; i++) {
-				MaAnim maa = MaAnim.newIns(loader.loadFile(id.base, id, getBaseMA()[i]));
-				if (isOld)
-					for (Part line : maa.parts)
-						if (line.ints[1] == 8)
-							line.ints[1] = 53;
-				ans[i] = maa;
-			}
+			for (int i = 0; i < getBaseMA().length; i++)
+				ans[i] = MaAnim.newIns(loader.loadFile(id.base, id, getBaseMA()[i]), isOld);
 			return ans;
 		}
 
