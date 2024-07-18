@@ -73,6 +73,8 @@ public class StageBasis extends BattleObj {
 	public Background bg;
 	public BackgroundEffect bgEffect;
 
+	public boolean leaSort = false;
+
 	/**
 	 * Real groundHeight of battle
 	 */
@@ -909,7 +911,7 @@ public class StageBasis extends BattleObj {
 				}
 			}
 			lea.add(new EAnimCont(700, 9, effas().A_SHOCKWAVE.getEAnim(DefEff.DEF)));
-			lea.sort(Comparator.comparingInt(e -> e.layer));
+			leaSort = true;
 			CommonStatic.setSE(SE_BOSS);
 			shock = false;
 		}
@@ -940,6 +942,10 @@ public class StageBasis extends BattleObj {
 			ubaseSmoke.removeIf(EAnimCont::done);
 		} else {
 			lea.removeIf(content -> content instanceof WaprCont && ((WaprCont) content).timeImmune && content.done());
+		}
+		if (leaSort) {
+			lea.sort(Comparator.comparingInt(e -> e.layer));
+			leaSort = false;
 		}
 		updateTheme();
 		if (s_stop > 0)

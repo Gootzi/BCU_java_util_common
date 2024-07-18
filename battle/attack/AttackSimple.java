@@ -1,12 +1,15 @@
 package common.battle.attack;
 
+import common.CommonStatic;
 import common.battle.data.MaskAtk;
 import common.battle.entity.AbEntity;
+import common.battle.entity.EAnimCont;
 import common.battle.entity.Entity;
 import common.battle.entity.Sniper;
 import common.util.Data;
 import common.util.Data.Proc.MOVEWAVE;
 import common.util.Data.Proc.VOLC;
+import common.util.pack.EffAnim;
 import common.util.unit.Trait;
 
 import java.util.ArrayList;
@@ -132,6 +135,11 @@ public class AttackSimple extends AttackAb {
 		}
 
 		int layer = model.getLayer();
+		if (proc.BOSS.exists()) {
+			model.b.lea.add(new EAnimCont(model.getPos(), model.getLayer(), effas().A_SHOCKWAVE.getEAnim(EffAnim.DefEff.DEF)));
+			CommonStatic.setSE(SE_BOSS);
+			model.b.leaSort = true;
+		}
 		if (proc.MOVEWAVE.exists()) {
 			MOVEWAVE mw = proc.MOVEWAVE;
 			int dire = model.getDire();

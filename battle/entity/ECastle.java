@@ -12,7 +12,6 @@ import common.util.unit.Trait;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class ECastle extends AbEntity {
 
@@ -66,13 +65,13 @@ public class ECastle extends AbEntity {
 		if (satk > 0) {
 			ans *= (100 + satk) * 0.01;
 			sb.lea.add(new EAnimCont(pos, 9, effas().A_SATK.getEAnim(DefEff.DEF), -75f));
-			sb.lea.sort(Comparator.comparingInt(e -> e.layer));
+			sb.leaSort = true;
 			CommonStatic.setSE(SE_SATK);
 		}
 		if (atk.getProc().CRIT.mult > 0) {
 			ans *= 0.01 * atk.getProc().CRIT.mult;
 			sb.lea.add(new EAnimCont(pos, 9, effas().A_CRIT.getEAnim(DefEff.DEF), -75f));
-			sb.lea.sort(Comparator.comparingInt(e -> e.layer));
+			sb.leaSort = true;
 			CommonStatic.setSE(SE_CRIT);
 		}
 		CommonStatic.setSE(SE_HIT_BASE);
