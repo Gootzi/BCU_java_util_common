@@ -30,7 +30,7 @@ public class EEnemy extends Entity {
 		layer = d0 == d1 ? d0 : d0 + (int) (b.r.nextFloat() * (d1 - d0 + 1));
 		traits = de.getTraits();
 
-		canBurrow = mark < 1;
+		skipSpawnBurrow = mark >= 1;
 	}
 
 	@Override

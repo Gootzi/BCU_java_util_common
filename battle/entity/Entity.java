@@ -735,7 +735,7 @@ public abstract class Entity extends AbEntity {
 		protected void setUp() {
 			atkTime = e.data.getAnimLen();
 			preID = 0;
-			preTime = pres[0] - 1;
+			preTime = pres[0];
 			e.anim.setAnim(UType.ATK, true);
 		}
 
@@ -750,6 +750,7 @@ public abstract class Entity extends AbEntity {
 		private void updateAttack() {
 			atkTime--;
 			if (preTime >= 0) {
+				preTime--;
 				if (preTime == 0) {
 					int atk0 = preID;
 					while (true) {
@@ -762,13 +763,12 @@ public abstract class Entity extends AbEntity {
 						preTime = pres[preID];
 					} else {
 						loop--;
-						e.waitTime = Math.max(e.data.getTBA() - 1, 0);
+						e.waitTime = Math.max(e.data.getTBA(), 0);
 					}
 				}
-				preTime--;
 			}
 			if (atkTime == 0) {
-				e.canBurrow = true;
+				e.skipSpawnBurrow = false;
 				e.anim.setAnim(UType.IDLE, true);
 			}
 		}
@@ -815,9 +815,9 @@ public abstract class Entity extends AbEntity {
 				return;
 			float d = tempKBdist;
 			tempKBtype = -1;
-			e.clearState();
-			kbType = t;
+			e.atkm.stopAtk();
 			e.kbTime = KB_TIME[t];
+			kbType = t;
 			kbDis = d;
 			initPos = e.pos;
 			kbDuration = e.kbTime;
@@ -1159,8 +1159,6 @@ public abstract class Entity extends AbEntity {
 				int[][] status = e.status;
 				doRevive(c);
 				// clear state
-				e.bdist = 0;
-				status[P_BURROW][2] = 0;
 				status[P_STOP] = new int[PROC_WIDTH];
 				status[P_SLOW] = new int[PROC_WIDTH];
 				status[P_WEAK] = new int[PROC_WIDTH];
@@ -1409,9 +1407,11 @@ public abstract class Entity extends AbEntity {
 	private final Proc sealed = Proc.blank();
 
 	/**
-	 * determines when the entity can burrow
+	 * determines whether to skip burrowing at spawn point
+	 * burrow will happen after the first step or the first attack
+	 * only used by boss
 	 */
-	protected boolean canBurrow = true;
+	protected boolean skipSpawnBurrow = false;
 
 	/**
 	 * temporary value for move check
@@ -2178,21 +2178,21 @@ public abstract class Entity extends AbEntity {
 	 * @param conf The type of animation used
 	 */
 	public void setSummon(int conf, Entity bond) {
-		// conf 1
+
 		if (conf == 1) {
 			kb.kbType = INT_WARP;
 			kbTime = effas().A_W.len(WarpEff.EXIT);
 			status[P_WARP][2] = 1;
 		}
-		// conf 2
+
 		if (conf == 2 && data.getPack().anim.anims.length >= 7) {
 			kbTime = -3;
 			bdist = -1;
 		}
 
 		if (conf == 3 && data.getPack().anim.anims.length >= 7) {
-			kbTime = -3;
 			status[P_BURROW] = new int[PROC_WIDTH];
+			kbTime = -3;
 			bdist = -1;
 		}
 
@@ -2266,9 +2266,9 @@ public abstract class Entity extends AbEntity {
 			return TCH_SOUL | ex;
 		if (status[P_REVIVE][1] >= REVIVE_SHOW_TIME && anim.corpse != null && anim.corpse.type != ZombieEff.BACK)
 			return TCH_CORPSE | ex;
-		if (status[P_BURROW][2] > 0)
+		if (kbTime == -2 || kbTime == -4)
 			return n | TCH_UG | ex;
-		if (kbTime < -1)
+		if (kbTime == -3)
 			return TCH_UG | ex;
 		if (anim.anim.type == UType.ENTER)
 			return TCH_ENTER | ex;
@@ -2288,12 +2288,11 @@ public abstract class Entity extends AbEntity {
 	}
 
 	private boolean walking = true;
-	private boolean burrowing = false;
 
 	/**
 	 * update the entity. order of update:
-	 *  1st iteration:   KB -> proc -> check touch to move -> revive -> update burrow
-	 *  2ns iteration:   check touch to validate walking -> start burrow -> attack
+	 *  1st iteration (movement) :   KB -> proc -> check touch to move -> [revive, update burrow]
+	 *  2ns iteration (reactions):   check touch to validate walking -> [start burrow, start/update attack]
 	 */
 	@Override
 	public void update() {
@@ -2305,11 +2304,9 @@ public abstract class Entity extends AbEntity {
 		updateProc();
 		barrier.update();
 
-		boolean canAct = kbTime == 0 && anim.anim.type != UType.ENTER;
-
 		// move if possible
 		// walking modifier in update2: delaying to the next frame the movement of entities that resumed walking
-		if (canAct && walking) {
+		if (kbTime == 0 && walking) {
 			checkTouch();
 
 			if (!touch && status[P_STOP][0] == 0) {
@@ -2324,59 +2321,59 @@ public abstract class Entity extends AbEntity {
 		// update revive status, mark acted
 		zx.updateRevive();
 
-		if(burrowing)
+		if(kbTime < -1)
 			updateBurrow();
 	}
 
 	@Override
 	public void update2() {
 
-		boolean nstop = status[P_STOP][0] == 0;
-		canBurrow |= atkm.loop < data.getAtkLoop() - 1;
-
-		boolean canAct = kbTime == 0 && anim.anim.type != UType.ENTER;
-
-		// check touch after KB or move, validate walking
-		walking = false;
-		if (canAct && !acted && atkm.atkTime == 0 && status[P_REVIVE][1] == 0) {
-			checkTouch();
-
-			// being stopped shouldn't invalidate walking status, entities will move in the same frame freeze proc ends
-			if (!touch) {
-				if (health > 0) {
-					walking = true;
-					anim.setAnim(UType.WALK, true);
-				}
-			}
-		}
-
-		// update burrow state if not stopped
-		if (nstop && canBurrow && !burrowing && !acted && kbTime == 0 && touch && status[P_BURROW][0] != 0)
-			startBurrow();
-
-		canAct &= kbTime == 0;
-
-		boolean canAttack = !isBase || !(data.getSpeed() == 0 && data.allAtk() == 0);
-
-		// update wait and attack state
-		if (canAct && canAttack) {
-			boolean binatk = waitTime + atkm.atkTime == 0;
-			binatk &= touchEnemy && atkm.loop != 0 && nstop;
-
-			// if it can attack, setup attack state
-			if (!acted && binatk && !(isBase && health <= 0))
-				atkm.setUp();
-
-			// update waiting state
-			if ((waitTime >= 0 || !touchEnemy) && touch && atkm.atkTime == 0 && !(isBase && health <= 0))
-				anim.setAnim(UType.IDLE, true);
-		}
-
+		// decrement TBA
 		if (waitTime > 0)
 			waitTime--;
 
-		// update attack status when in attack state
-		if (atkm.atkTime > 0 && nstop)
+		boolean nstop = status[P_STOP][0] == 0;
+		walking = false;
+
+		if (kbTime != 0 || (isBase && health <= 0) || anim.anim.type == UType.ENTER) {
+			anim.update();
+			bondTree.update();
+			return;
+		}
+
+		// if not attacking
+		if(atkm.atkTime == 0) {
+
+			// check collisions
+			if (!acted && status[P_REVIVE][1] == 0) {
+				checkTouch();
+				// being stopped shouldn't invalidate walking status, entities will move in the same frame freeze proc ends
+				if (!touch) {
+					if (health > 0) {
+						walking = true;
+						anim.setAnim(UType.WALK, true);
+					}
+				}
+			}
+
+			// if colliding
+			if(touch) {
+
+				// default idle
+				anim.setAnim(UType.IDLE, true);
+
+				// start burrow
+				if (nstop && !skipSpawnBurrow && !acted && status[P_BURROW][0] != 0)
+					startBurrow();
+
+				// start attack
+				if (kbTime == 0 && !acted && waitTime == 0 && touchEnemy && atkm.loop != 0 && nstop)
+					atkm.setUp();
+			}
+		}
+
+		// update attack status while attacking
+		if (kbTime == 0 && atkm.atkTime > 0 && nstop)
 			atkm.updateAttack();
 
 		anim.update();
@@ -2436,7 +2433,7 @@ public abstract class Entity extends AbEntity {
 	 */
 	protected void updateMove(float extmov) {
 		if (moved)
-			canBurrow = true;
+			skipSpawnBurrow = false;
 		moved = true;
 
 		if (cantGoMore())
@@ -2478,18 +2475,6 @@ public abstract class Entity extends AbEntity {
 			return pos >= basis.st.len;
 		} else {
 			return pos <= 0;
-		}
-	}
-
-	/**
-	 * interrupt whatever this entity is doing
-	 */
-	private void clearState() {
-		atkm.stopAtk();
-		if (kbTime < -1 || status[P_BURROW][2] > 0) {
-			status[P_BURROW][2] = 0;
-			bdist = 0;
-			kbTime = 0;
 		}
 	}
 
@@ -2564,7 +2549,6 @@ public abstract class Entity extends AbEntity {
 		boolean ntbs = (bpos - pos) * dire > data.touchBase();
 		if (ntbs) {
 			// setup burrow state
-			burrowing = true;
 			status[P_BURROW][0]--;
 			status[P_BURROW][2] = anim.setAnim(UType.BURROW_DOWN, false) - 1;
 			kbTime = -2;
@@ -2609,11 +2593,8 @@ public abstract class Entity extends AbEntity {
 			status[P_BURROW][2]--;
 			if (data.getResurface() != null && anim.anim.len() - status[P_BURROW][2] == data.getResurface().pre)
 				basis.getAttack(aam.getAttack(data.getAtkCount() + 3));
-			if (status[P_BURROW][2] <= 0) {
+			if (status[P_BURROW][2] <= 0)
 				kbTime = 0;
-				burrowing = false;
-			}
-
 		}
 
 	}
