@@ -2147,7 +2147,7 @@ public abstract class Entity extends AbEntity {
 
 		kb.doInterrupt();
 
-		if ((getAbi() & AB_GLASS) > 0 && atkm.atkTime - 1 == 0 && kbTime == 0 && atkm.loop == 0)
+		if ((getAbi() & AB_GLASS) > 0 && atkm.atkTime - 1 <= 0 && kbTime == 0 && atkm.loop == 0)
 			kill(KillMode.SELF_DESTRUCT);
 
 		// update ZKill
