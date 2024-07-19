@@ -369,7 +369,7 @@ public abstract class MapColc extends Data implements IndexContainer.SingleIC<St
 									});
 
 									if (map.stageLimit == null) {
-										map.stageLimit = new StageLimit(maxMoney, -1, bannedCombo);
+										map.stageLimit = new StageLimit(maxMoney, 0, bannedCombo);
 									} else {
 										map.stageLimit.maxMoney = maxMoney;
 										map.stageLimit.bannedCatCombo.addAll(bannedCombo);
@@ -395,7 +395,7 @@ public abstract class MapColc extends Data implements IndexContainer.SingleIC<St
 									});
 
 									if (map.stageLimit == null) {
-										map.stageLimit = new StageLimit(-1, globalCooldown, bannedCombo);
+										map.stageLimit = new StageLimit(0, globalCooldown, bannedCombo);
 									} else {
 										map.stageLimit.globalCooldown = globalCooldown;
 										map.stageLimit.bannedCatCombo.addAll(bannedCombo);
