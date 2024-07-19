@@ -11,9 +11,6 @@ public class CannonLevelCurve extends Data {
         DECORATION
     }
 
-    private static final byte MIN_VALUE = 0;
-    private static final byte MAX_VALUE = 1;
-
     private final PART part;
 
     private final Map<Integer, int[][]> curveMap;
