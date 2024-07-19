@@ -2328,7 +2328,7 @@ public abstract class Entity extends AbEntity {
 		// update revive status, mark acted
 		zx.updateRevive();
 
-		if(kbTime < -1)
+		if(kbTime < -1 && status[P_STOP][0] == 0)
 			updateBurrow();
 	}
 
