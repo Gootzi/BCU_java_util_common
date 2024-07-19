@@ -1445,17 +1445,8 @@ public abstract class Entity extends AbEntity {
 		aam = AtkModelEntity.getEnemyAtk(this, atkMagnif);
 		anim = new AnimManager(this, ea);
 		atkm = new AtkManager(this);
-		status[P_BARRIER][0] = getProc().BARRIER.type.magnif ? (int) (getProc().BARRIER.health * hpMagnif) : getProc().BARRIER.health;
-		status[P_BARRIER][1] = getProc().BARRIER.regentime;
-		status[P_BARRIER][2] = getProc().BARRIER.timeout;
-		status[P_BURROW][0] = getProc().BURROW.count;
-		status[P_REVIVE][0] = getProc().REVIVE.count;
-		status[P_DMGCUT][0] = getProc().DMGCUT.type.magnif ? (int) (hpMagnif * getProc().DMGCUT.dmg) : getProc().DMGCUT.dmg;
-		status[P_DMGCAP][0] = getProc().DMGCAP.type.magnif ? (int) (hpMagnif * getProc().DMGCAP.dmg) : getProc().DMGCAP.dmg;
-		sealed.BURROW.set(data.getProc().BURROW);
-		sealed.REVIVE.count = data.getProc().REVIVE.count;
-		sealed.REVIVE.time = data.getProc().REVIVE.time;
-		sealed.REVIVE.health = data.getProc().REVIVE.health;
+		presetStatus(hpMagnif);
+		presetSealedProcs();
 		maxCurrentShield = currentShield = (int) (de.getProc().DEMONSHIELD.hp * hpMagnif);
 		shieldMagnification = hpMagnif;
 	}
@@ -1478,12 +1469,28 @@ public abstract class Entity extends AbEntity {
 		status[P_REVIVE][0] = getProc().REVIVE.count;
 		status[P_DMGCUT][0] = getProc().DMGCUT.type.magnif ? (int) (lvMagnif * getProc().DMGCUT.dmg) : getProc().DMGCUT.dmg;
 		status[P_DMGCAP][0] = getProc().DMGCAP.type.magnif ? (int) (lvMagnif * getProc().DMGCAP.dmg) : getProc().DMGCAP.dmg;
+		presetStatus(lvMagnif);
+		presetSealedProcs();
+		maxCurrentShield = currentShield = (int) (de.getProc().DEMONSHIELD.hp * lvMagnif);
+		shieldMagnification = lvMagnif;
+	}
+
+	private void presetStatus(float mag) {
+		status[P_BARRIER][0] = getProc().BARRIER.type.magnif ? (int) (getProc().BARRIER.health * mag) : getProc().BARRIER.health;
+		status[P_BARRIER][1] = getProc().BARRIER.regentime;
+		status[P_BARRIER][2] = getProc().BARRIER.timeout;
+		status[P_BURROW][0] = getProc().BURROW.count;
+		status[P_REVIVE][0] = getProc().REVIVE.count;
+		status[P_DMGCUT][0] = getProc().DMGCUT.type.magnif ? (int) (mag * getProc().DMGCUT.dmg) : getProc().DMGCUT.dmg;
+		status[P_DMGCAP][0] = getProc().DMGCAP.type.magnif ? (int) (mag * getProc().DMGCAP.dmg) : getProc().DMGCAP.dmg;
+	}
+
+	private void presetSealedProcs() {
 		sealed.BURROW.set(data.getProc().BURROW);
 		sealed.REVIVE.count = data.getProc().REVIVE.count;
 		sealed.REVIVE.time = data.getProc().REVIVE.time;
 		sealed.REVIVE.health = data.getProc().REVIVE.health;
-		maxCurrentShield = currentShield = (int) (de.getProc().DEMONSHIELD.hp * lvMagnif);
-		shieldMagnification = lvMagnif;
+		sealed.SPIRIT.id = data.getProc().SPIRIT.id;
 	}
 
 	public void altAbi(int alt) {
