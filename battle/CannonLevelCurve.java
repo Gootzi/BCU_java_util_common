@@ -63,11 +63,9 @@ public class CannonLevelCurve extends Data {
         level = Math.max(0, Math.min(level, curve[curve.length - 1][0]));
 
         int i = 0;
-        int prev_thereshold = 1;
-        while(level > curve[i][0]) {
-            prev_thereshold = curve[i][0];
-            i++;
-        }
-        return curve[i][1] + (curve[i][2] - curve[i][1]) * (level - prev_thereshold) / (curve[i][0] - prev_thereshold);
+        int prevThreshold = 1;
+        while(level > curve[i][0])
+            prevThreshold = curve[i++][0];
+        return curve[i][1] + (curve[i][2] - curve[i][1]) * (level - prevThreshold) / (curve[i][0] - prevThreshold);
     }
 }
