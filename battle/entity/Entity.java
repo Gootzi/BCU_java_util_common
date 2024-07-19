@@ -2313,7 +2313,7 @@ public abstract class Entity extends AbEntity {
 
 		// move if possible
 		// walking modifier in update2: delaying to the next frame the movement of entities that resumed walking
-		if (kbTime == 0 && walking) {
+		if (kbTime == 0 && walking && atkm.atkTime == 0) {
 			checkTouch();
 
 			if (!touch && status[P_STOP][0] == 0) {

@@ -66,9 +66,7 @@ public class EUnit extends Entity {
 		traits = de.getTraits();
 		lvl = level.getLv() + level.getPlusLv();
 		this.index = index;
-
 		this.level = level;
-
 		this.isSpirit = isSpirit;
 	}
 
@@ -101,18 +99,16 @@ public class EUnit extends Entity {
 
 		traits = status[P_CURSE][0] == 0 && status[P_SEAL][0] == 0 ? data.getTraits() : new ArrayList<>();
 
-		if (isSpirit && atkm.atkTime == 0) {
+		if (isSpirit && atkm.atkTime == 0)
 			kill(KillMode.SPIRIT);
-		}
 	}
 
 	@Override
 	public void added(int d, float p) {
 		super.added(d, p);
 
-		if (isSpirit) {
+		if (isSpirit)
 			atkm.setUp();
-		}
 	}
 
 	@Override

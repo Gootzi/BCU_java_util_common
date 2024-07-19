@@ -424,12 +424,8 @@ public class StageBasis extends BattleObj {
 	}
 
 	protected boolean act_spawn(int i, int j, boolean manual) {
-		if (buttonDelay > 0)
+		if (buttonDelay > 0 || ubase.health == 0)
 			return false;
-
-		if (ubase.health == 0) {
-			return false;
-		}
 
 		if(buttonDelayOn && manual && selectedUnit[0] == -1) {
 			if(elu.price[i][j] != -1 || b.lu.fs[i][j] == null) {
@@ -449,31 +445,24 @@ public class StageBasis extends BattleObj {
 			return false;
 
 		EForm f = b.lu.efs[i][j];
-
-		if (f == null) {
+		if (f == null)
 			return false;
-		}
 
 		if (manual && f.du.getProc().SPIRIT.exists() && summonerSummoned[i][j] && summoner[i][j].anim.dead < 0 && !spiritSummoned[i][j]) {
 			if (spiritCooldown[i][j] > 0) {
 				CommonStatic.setSE(SE_SPEND_FAIL);
-
 				return false;
 			}
 
 			f = b.lu.spirits[i][j];
-
 			if (f == null)
 				return false;
-
 			if (entityCount(-1) >= max_num - f.du.getWill()) {
 				CommonStatic.setSE(SE_SPEND_FAIL);
-
 				return false;
 			}
 
 			CommonStatic.setSE(SE_SPIRIT_SUMMON);
-
 			EUnit su = f.getEntity(this, null, true);
 
 			// summoner.pos and not summoner.lastPosition
@@ -485,7 +474,6 @@ public class StageBasis extends BattleObj {
 			le.sort(Comparator.comparingInt(e -> e.layer));
 
 			spiritSummoned[i][j] = true;
-
 			unitRespawnTime = 1;
 
 			return true;
