@@ -34,7 +34,7 @@ public class CannonLevelCurve extends Data {
             case CANNON:
                 switch (type) {
                     case BASE_RANGE:
-                        return (int) v / 4f;
+                        return v / 4f;
                     case BASE_HEALTH_PERCENTAGE:
                         return v / 10f;
                     case BASE_HOLY_ATK_SURFACE:
@@ -51,27 +51,23 @@ public class CannonLevelCurve extends Data {
         }
     }
 
-    public float applyFormulaRaw(int type, int level) { // todo: apply new formula
-        return 0;
-//        if (level <= 0 || !curveMap.containsKey(type)) {
-//            System.out.println("Warning : Invalid level " + level);
-//            return 0;
-//        }
-//
-//        int[][] curve = curveMap.get(type);
-//        int index = Math.min((level - 1) / 10, curve[0].length - 1);
-//
-//        int min = curve[MIN_VALUE][index];
-//        int max = curve[MAX_VALUE][index];
-//
-//        float v;
-//
-//        if (level <= 10 && part == PART.CANNON) {
-//            v = min + (max - min) * (level - 1) / 9f;
-//        } else {
-//            v = min + (max - min) * (level % 10) / 10f;
-//        }
-//
-//        return v;
+    public int applyFormulaRaw(int type, int level) {
+        if (!curveMap.containsKey(type)) {
+            System.out.println("Warning : Invalid type " + type);
+            return 0;
+        }
+
+        int[][] curve = curveMap.get(type);
+
+        // clip level between 0 and max allowed
+        level = Math.max(0, Math.min(level, curve[curve.length - 1][0]));
+
+        int i = 0;
+        int prev_thereshold = 1;
+        while(level > curve[i][0]) {
+            prev_thereshold = curve[i][0];
+            i++;
+        }
+        return curve[i][1] + (curve[i][2] - curve[i][1]) * (level - prev_thereshold) / (curve[i][0] - prev_thereshold);
     }
 }

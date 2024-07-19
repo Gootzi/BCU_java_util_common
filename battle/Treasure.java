@@ -165,15 +165,12 @@ public class Treasure extends Data {
 	}
 
 	public float getCannonMagnification(int id, int type) {
-		if(curveData.containsKey(id)) {
-			CannonLevelCurve levelCurve = curveData.get(id);
-
-			return levelCurve.applyFormula(type, bslv[id]);
+		if(!curveData.containsKey(id)) {
+			System.out.println("Warning : Unknown ID : "+ id);
+			return 0;
 		}
-
-		System.out.println("Warning : Unknown ID : "+ id);
-
-		return 0;
+		CannonLevelCurve levelCurve = curveData.get(id);
+		return levelCurve.applyFormula(type, bslv[id]);
 	}
 
 	public float getBaseMagnification(int id, List<Trait> traits, boolean raw) {
