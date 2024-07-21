@@ -159,6 +159,50 @@ public class EPart extends ImgCore implements Comparable<EPart> {
 		return "?";
 	}
 
+	public float getValRaw(int m) {
+		if (m == 0)
+			return par;
+		else if (m == 1)
+			return id;
+		else if (m == 2)
+			return img;
+		else if (m == 3)
+			return z;
+		else if (m == 4)
+			return (int) pos.x;
+		else if (m == 5)
+			return (int) pos.y;
+		else if (m == 6)
+			return (int) piv.x;
+		else if (m == 7)
+			return (int) piv.y;
+		else if (m == 8)
+			return gsca;
+		else if (m == 9)
+			return (int) sca.x;
+		else if (m == 10)
+			return (int) sca.y;
+		else if (m == 11)
+			return angle;
+		else if (m == 12)
+			return opacity;
+		else if (m == 13)
+			return hf;
+		else if (m == 14)
+			return vf;
+		else if (m == 50)
+			return extendX;
+		else if (m == 51)
+			return extendX;
+		else if (m == 52)
+			return extendY;
+		else if (m == 53)
+			return gsca;
+		else
+			System.out.println("EPart modification can be: " + m);
+		return -1;
+	}
+
 	@Override
 	public String toString() {
 		return name;
