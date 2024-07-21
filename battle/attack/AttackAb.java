@@ -22,7 +22,7 @@ public abstract class AttackAb extends BattleObj {
 	public final int layer;
 	public final boolean isLongAtk, SPtr;
 	public int duration;
-	public boolean excludeLastEdge = false, isCounter = false;
+	public boolean excludeLastEdge = false, isCounter = false, isInverted = false;
 
 	public int touch = TCH_N, dire, canon = -2, waveType = 0, volcType = 0;
 

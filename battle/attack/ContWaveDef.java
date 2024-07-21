@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ContWaveDef extends ContWaveAb {
 
-	protected ContWaveDef(AttackWave a, float p, int layer, int delay) {
+	protected ContWaveDef(AttackWave a, float p, int layer, int delay, boolean inv) {
 		super(a, p, (a.dire == 1 ? a.waveType == WT_MINI ? effas().A_E_MINIWAVE : effas().A_E_WAVE : a.waveType == WT_MINI ? effas().A_MINIWAVE : effas().A_WAVE).getEAnim(DefEff.DEF), layer, delay);
 		soundEffect = SE_WAVE;
 
@@ -18,14 +18,16 @@ public class ContWaveDef extends ContWaveAb {
 		anim.setTime(1);
 		waves = new HashSet<>();
 		waves.add(this);
+		isInverted = inv;
 	}
 
-	protected ContWaveDef(AttackWave a, float p, int layer, int delay, Set<ContWaveAb> waves) {
+	protected ContWaveDef(AttackWave a, float p, int layer, int delay, Set<ContWaveAb> waves, boolean inv) {
 		super(a, p, (a.dire == 1 ? a.waveType == WT_MINI ? effas().A_E_MINIWAVE : effas().A_E_WAVE : a.waveType == WT_MINI ? effas().A_MINIWAVE : effas().A_WAVE).getEAnim(DefEff.DEF), layer, delay);
 		soundEffect = SE_WAVE;
 
 		maxt -= 1;
 		anim.setTime(1);
+		isInverted = inv;
 		this.waves = waves;
 		this.waves.add(this);
 	}
@@ -78,8 +80,16 @@ public class ContWaveDef extends ContWaveAb {
 	protected void nextWave() {
 		int dire = atk.model.getDire();
 		float np = pos + W_PROG * dire;
+
+		if (atk.proc.WAVE.inverted == true) {
+			np = pos - W_PROG * dire;
+		}
+		if (atk.proc.MINIWAVE.inverted == true) {
+			np = pos - W_PROG * dire;
+		}
+
 		int wid = dire == 1 ? W_E_WID : W_U_WID;
-		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves);
+		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves, atk.proc.WAVE.inverted);
 	}
 
 	@Override

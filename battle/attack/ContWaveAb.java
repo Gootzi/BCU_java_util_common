@@ -17,7 +17,7 @@ public abstract class ContWaveAb extends ContAb {
 	protected int soundEffect;
 	protected int t = 0;
 	protected int maxt;
-	protected boolean tempAtk;
+	protected boolean tempAtk, isInverted;
 
 	protected ContWaveAb(AttackWave a, float p, EAnimD<?> ead, int layer, int delay) {
 		super(a.model.b, p, layer);

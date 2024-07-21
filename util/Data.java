@@ -599,6 +599,9 @@ public class Data {
 			public int prob;
 			@Order(1)
 			public int lv;
+
+			@Order(2)
+			public boolean inverted;
 		}
 
 		@JsonClass(noTag = NoTag.LOAD)
@@ -609,6 +612,8 @@ public class Data {
 			public int lv;
 			@Order(2)
 			public int multi;
+			@Order(3)
+			public boolean inverted;
 		}
 
 		@JsonClass(noTag = NoTag.LOAD) //Used for procs that lack the block reformat
