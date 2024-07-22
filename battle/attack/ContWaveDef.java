@@ -18,7 +18,6 @@ public class ContWaveDef extends ContWaveAb {
 		anim.setTime(1);
 		waves = new HashSet<>();
 		waves.add(this);
-		isInverted = inv;
 	}
 
 	protected ContWaveDef(AttackWave a, float p, int layer, int delay, Set<ContWaveAb> waves, boolean inv) {
@@ -27,7 +26,6 @@ public class ContWaveDef extends ContWaveAb {
 
 		maxt -= 1;
 		anim.setTime(1);
-		isInverted = inv;
 		this.waves = waves;
 		this.waves.add(this);
 	}
@@ -81,15 +79,15 @@ public class ContWaveDef extends ContWaveAb {
 		int dire = atk.model.getDire();
 		float np = pos + W_PROG * dire;
 
-		if (atk.proc.WAVE.inverted == true) {
+		if (atk.proc.WAVE.inverted && atk.waveType == WT_WAVE) {
 			np = pos - W_PROG * dire;
 		}
-		if (atk.proc.MINIWAVE.inverted == true) {
+		if (atk.proc.MINIWAVE.inverted && atk.waveType == WT_MINI) {
 			np = pos - W_PROG * dire;
 		}
 
 		int wid = dire == 1 ? W_E_WID : W_U_WID;
-		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves, atk.proc.WAVE.inverted || atk.proc.MINIWAVE.inverted);
+		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves, atk.waveType == WT_MINI ? atk.proc.MINIWAVE.inverted : atk.proc.WAVE.inverted);
 	}
 
 	@Override
