@@ -87,7 +87,7 @@ public class ContWaveDef extends ContWaveAb {
 		}
 
 		int wid = dire == 1 ? W_E_WID : W_U_WID;
-		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves, atk.waveType == WT_MINI ? atk.proc.MINIWAVE.inverted : atk.proc.WAVE.inverted);
+		new ContWaveDef(new AttackWave(atk.attacker, atk, np, wid), np, layer, 0, waves);
 	}
 
 	@Override
