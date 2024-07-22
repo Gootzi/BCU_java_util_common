@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ContWaveDef extends ContWaveAb {
 
-	protected ContWaveDef(AttackWave a, float p, int layer, int delay, boolean inv) {
+	protected ContWaveDef(AttackWave a, float p, int layer, int delay) {
 		super(a, p, (a.dire == 1 ? a.waveType == WT_MINI ? effas().A_E_MINIWAVE : effas().A_E_WAVE : a.waveType == WT_MINI ? effas().A_MINIWAVE : effas().A_WAVE).getEAnim(DefEff.DEF), layer, delay);
 		soundEffect = SE_WAVE;
 
@@ -20,7 +20,7 @@ public class ContWaveDef extends ContWaveAb {
 		waves.add(this);
 	}
 
-	protected ContWaveDef(AttackWave a, float p, int layer, int delay, Set<ContWaveAb> waves, boolean inv) {
+	protected ContWaveDef(AttackWave a, float p, int layer, int delay, Set<ContWaveAb> waves) {
 		super(a, p, (a.dire == 1 ? a.waveType == WT_MINI ? effas().A_E_MINIWAVE : effas().A_E_WAVE : a.waveType == WT_MINI ? effas().A_MINIWAVE : effas().A_WAVE).getEAnim(DefEff.DEF), layer, delay);
 		soundEffect = SE_WAVE;
 
