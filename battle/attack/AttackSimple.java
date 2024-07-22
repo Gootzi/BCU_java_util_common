@@ -162,7 +162,7 @@ public class AttackSimple extends AttackAb {
 			}
 			// generate a wave when hits somebody
 
-			ContWaveDef wave = new ContWaveDef(new AttackWave(attacker, this, p0, wid, WT_WAVE), p0, layer, -3, proc.WAVE.inverted);
+			ContWaveDef wave = new ContWaveDef(new AttackWave(attacker, this, p0, wid, WT_WAVE), p0, layer, -3);
 
 			if(attacker != null) {
 				attacker.summoned.add(wave);
@@ -179,7 +179,7 @@ public class AttackSimple extends AttackAb {
 				p0 = model.getPos() + (dire * addp) + ((200 * (proc.MINIWAVE.lv - 1)) * dire);
 			}
 
-			ContWaveDef wave = new ContWaveDef(new AttackWave(attacker, this, p0, wid, WT_MINI), p0, layer, -1, proc.MINIWAVE.inverted);
+			ContWaveDef wave = new ContWaveDef(new AttackWave(attacker, this, p0, wid, WT_MINI), p0, layer, -1);
 
 			if(attacker != null) {
 				attacker.summoned.add(wave);
