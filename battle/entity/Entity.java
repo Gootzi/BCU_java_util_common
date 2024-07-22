@@ -691,10 +691,7 @@ public abstract class Entity extends AbEntity {
 		 */
 		protected int atkTime;
 
-		/**
-		 * attack times remain
-		 */
-		private int loop;
+		private int attacksLeft;
 
 		/**
 		 * atk id primarily for display
@@ -729,10 +726,10 @@ public abstract class Entity extends AbEntity {
 			pres = new int[multi = raw.length];
 			for (int i = 0; i < multi; i++)
 				pres[i] = raw[i][1];
-			loop = e.data.getAtkLoop();
+			attacksLeft = e.data.getAtkLoop();
 		}
 
-		protected void setUp() {
+		protected void startAttack() {
 			atkTime = e.data.getAnimLen();
 			preID = 0;
 			preTime = pres[0];
@@ -762,7 +759,7 @@ public abstract class Entity extends AbEntity {
 					if (preID < multi) {
 						preTime = pres[preID];
 					} else {
-						loop--;
+						attacksLeft--;
 						e.waitTime = Math.max(e.data.getTBA(), 0);
 					}
 				}
@@ -865,7 +862,7 @@ public abstract class Entity extends AbEntity {
 					return;
 				}
 
-				if ((e.getAbi() & AB_GLASS) > 0 && e.atkm.atkTime - 1 == 0 && e.atkm.loop == 0) {
+				if ((e.getAbi() & AB_GLASS) > 0 && e.atkm.atkTime - 1 == 0 && e.atkm.attacksLeft == 0) {
 					e.kill(KillMode.SELF_DESTRUCT);
 
 					return;
@@ -1116,7 +1113,7 @@ public abstract class Entity extends AbEntity {
 		private void doRevive(int c) {
 			int deadAnim = minRevTime();
 			EffAnim<ZombieEff> ea = effas().A_ZOMBIE;
-			deadAnim += ea.getEAnim(ZombieEff.REVIVE).len() - 1;
+			deadAnim += ea.getEAnim(ZombieEff.REVIVE).len();
 			e.status[P_REVIVE][1] = deadAnim;
 			int maxR = maxRevHealth();
 			e.health = e.maxH * maxR / 100;
@@ -1198,7 +1195,7 @@ public abstract class Entity extends AbEntity {
 					return em.kbTime == -1;
 				return true;
 			});
-			List<AbEntity> lm = e.basis.inRange(TCH_ZOMBX, -e.dire, 0, e.basis.st.len, false);
+			List<AbEntity> lm = e.basis.inRange(TCH_ZOMBX, e.dire, 0, e.basis.st.len, false);
 			for (int i = 0; i < lm.size(); i++) {
 				if (lm.get(i) == e)
 					continue;
@@ -1219,7 +1216,6 @@ public abstract class Entity extends AbEntity {
 			}
 
 			if (status[P_REVIVE][1] > 0) {
-				e.acted = true;
 				EffAnim<ZombieEff> ea = e.dire == -1 ? effas().A_U_ZOMBIE : effas().A_ZOMBIE;
 				if (anim.corpse == null) {
 					anim.corpse = ea.getEAnim(ZombieEff.DOWN);
@@ -1353,11 +1349,11 @@ public abstract class Entity extends AbEntity {
 	protected boolean isBase;
 
 	/**
-	 * KB FSM time, values: <br>
-	 * 0: not KB <br>
-	 * -1: dead <br>
+	 * KB/burrow state: <br>
+	 * -1: dead (spirit) <br>
 	 * positive: KB time count-down <br>
-	 * negative: burrow FSM type
+	 * negative: burrow type <br>
+	 * 0: none of the above
 	 */
 	private int kbTime;
 
@@ -1365,11 +1361,6 @@ public abstract class Entity extends AbEntity {
 	 * wait FSM time
 	 */
 	private int waitTime;
-
-	/**
-	 * acted: temp field, for update sync
-	 */
-	private boolean acted;
 
 	/**
 	 * remaining burrow distance
@@ -2154,7 +2145,7 @@ public abstract class Entity extends AbEntity {
 
 		kb.doInterrupt();
 
-		if ((getAbi() & AB_GLASS) > 0 && atkm.atkTime - 1 <= 0 && kbTime == 0 && atkm.loop == 0)
+		if ((getAbi() & AB_GLASS) > 0 && atkm.atkTime - 1 <= 0 && kbTime == 0 && atkm.attacksLeft == 0)
 			kill(KillMode.SELF_DESTRUCT);
 
 		// update ZKill
@@ -2171,8 +2162,6 @@ public abstract class Entity extends AbEntity {
 		}
 
 		summoned.removeIf(s -> !s.activate);
-
-		acted = false;
 
 		if(health <= 0 && zx.canRevive() == 0 && !killCounted) {
 			onLastBreathe();
@@ -2298,89 +2287,62 @@ public abstract class Entity extends AbEntity {
 
 	/**
 	 * update the entity. order of update:
-	 *  1st iteration (movement) :   KB -> proc -> check touch to move -> [revive, update burrow]
-	 *  2ns iteration (reactions):   check touch to validate walking -> [start burrow, start/update attack]
+	 *  1st iteration (movement) :   TBA, procs time tick -> move (KB, burrow, standard) -> revive
+	 *  2ns iteration (reactions):   validate walking OR go idle, start burrow, start attack -> update attack
 	 */
 	@Override
 	public void update() {
-		// if this entity is in kb state, do kbmove()
-		if (kbTime > 0)
-			kb.updateKB();
-
-		// update proc effects
-		updateProc();
-		barrier.update();
-
-		// move if possible
-		// walking modifier in update2: delaying to the next frame the movement of entities that resumed walking
-		if (kbTime == 0 && walking && atkm.atkTime == 0) {
-			checkTouch();
-
-			if (!touch && status[P_STOP][0] == 0) {
-				updateMove(0);
-
-				if (health > 0)
-					anim.setAnim(UType.WALK, true);
-
-			}
-		}
-
-		// update revive status, mark acted
-		zx.updateRevive();
-
-		if(kbTime < -1 && status[P_STOP][0] == 0)
-			updateBurrow();
-	}
-
-	@Override
-	public void update2() {
-
 		// decrement TBA
 		if (waitTime > 0)
 			waitTime--;
 
-		boolean nstop = status[P_STOP][0] == 0;
-		walking = false;
+		updateProc();
+		barrier.update();
 
-		if (kbTime != 0 || (isBase && health <= 0) || anim.anim.type == UType.ENTER) {
+		if (kbTime > 0)
+			kb.updateKB();
+		else if (status[P_STOP][0] == 0) {
+			if (kbTime < -1)
+				updateBurrow();
+			else if (kbTime == 0 && walking && !checkTouch())
+				updateMove(0);
+		}
+
+		zx.updateRevive();
+	}
+
+	@Override
+	public void update2() {
+		// short-circuit non-reacting exceptions
+		if (kbTime != 0 || (isBase && health <= 0) || anim.anim.type == UType.ENTER || status[P_REVIVE][1] != 0) {
 			anim.update();
 			bondTree.update();
 			return;
 		}
 
-		// if not attacking
+		// being frozen doesn't invalidate neither reactions nor walking readiness:
+		// entities still change animation while frozen based on collisions
+		// entities move in the same frame freeze proc ends
+		boolean nstop = status[P_STOP][0] == 0;
+
+		// if not attacking check collisions, act accordingly
 		if(atkm.atkTime == 0) {
-
-			// check collisions
-			if (!acted && status[P_REVIVE][1] == 0) {
-				checkTouch();
-				// being stopped shouldn't invalidate walking status, entities will move in the same frame freeze proc ends
-				if (!touch) {
-					if (health > 0) {
-						walking = true;
-						anim.setAnim(UType.WALK, true);
-					}
-				}
-			}
-
-			// if colliding
-			if(touch) {
-
-				// default idle
+			if (checkTouch()) {
+				walking = false;
 				anim.setAnim(UType.IDLE, true);
-
-				// start burrow
-				if (nstop && !skipSpawnBurrow && !acted && status[P_BURROW][0] != 0)
-					startBurrow();
-
-				// start attack
-				if (kbTime == 0 && !acted && waitTime == 0 && touchEnemy && atkm.loop != 0 && nstop)
-					atkm.setUp();
+				if(nstop) {
+					if (status[P_BURROW][0] != 0 && !skipSpawnBurrow && (basis.getBase(dire).pos - pos) * dire > data.touchBase())
+						startBurrow();
+					else if (waitTime == 0 && touchEnemy && atkm.attacksLeft != 0)
+						atkm.startAttack();
+				}
+			} else {
+				walking = true;
+				anim.setAnim(UType.WALK, true);
 			}
 		}
 
-		// update attack status while attacking
-		if (kbTime == 0 && atkm.atkTime > 0 && nstop)
+		if (atkm.atkTime > 0 && nstop)
 			atkm.updateAttack();
 
 		anim.update();
@@ -2552,55 +2514,43 @@ public abstract class Entity extends AbEntity {
 	}
 
 	private void startBurrow() {
-		float bpos = basis.getBase(dire).pos;
-		boolean ntbs = (bpos - pos) * dire > data.touchBase();
-		if (ntbs) {
-			// setup burrow state
-			status[P_BURROW][0]--;
-			status[P_BURROW][2] = anim.setAnim(UType.BURROW_DOWN, false) - 1;
-			kbTime = -2;
-		}
+		status[P_BURROW][0]--;
+		status[P_BURROW][2] = anim.setAnim(UType.BURROW_DOWN, false);
+		kbTime = -2;
 	}
 
-	/**
-	 * update burrow state
-	 */
 	private void updateBurrow() {
-		if (!acted && kbTime == -2) {
-			acted = true;
+		if (kbTime == -2) {
 			// burrow down
 			status[P_BURROW][2]--;
 			if (data.getGouge() != null && anim.anim.len() - status[P_BURROW][2] == data.getGouge().pre)
 				basis.getAttack(aam.getAttack(data.getAtkCount() + 2));
 			if (status[P_BURROW][2] == 0) {
-				kbTime = -3;
-				anim.setAnim(UType.BURROW_MOVE, true);
 				bdist = data.getRepAtk().getProc().BURROW.dis;
+				anim.setAnim(UType.BURROW_MOVE, true);
+				kbTime = -3;
 			}
 		}
-		if (!acted && kbTime == -3) {
+		if (kbTime == -3) {
 			// move underground
 			float oripos = pos;
 			if (bdist < 0) {
-				bdist = 0;
+				status[P_BURROW][2] = anim.setAnim(UType.BURROW_UP, false) + 1;
 				kbTime = -4;
-				status[P_BURROW][2] = anim.setAnim(UType.BURROW_UP, false);
 			} else if ((basis.getBase(dire).pos - pos) * dire - data.touchBase() <= 0) {
-				bdist = 0;
+				status[P_BURROW][2] = anim.setAnim(UType.BURROW_UP, true);
 				kbTime = -4;
-				status[P_BURROW][2] = anim.setAnim(UType.BURROW_UP, true) - 1;
 			} else {
 				updateMove(0);
 				bdist -= (pos - oripos) * dire;
 			}
 		}
-		if (!acted && kbTime == -4) {
+		if (kbTime == -4) {
 			// burrow up
-			acted = true;
 			status[P_BURROW][2]--;
 			if (data.getResurface() != null && anim.anim.len() - status[P_BURROW][2] == data.getResurface().pre)
 				basis.getAttack(aam.getAttack(data.getAtkCount() + 3));
-			if (status[P_BURROW][2] <= 0)
+			if (status[P_BURROW][2] == 0)
 				kbTime = 0;
 		}
 
@@ -2643,10 +2593,10 @@ public abstract class Entity extends AbEntity {
 	/**
 	 * verify touch state
 	 */
-	public void checkTouch() {
+	public boolean checkTouch() {
 		touch = true;
 		float[] ds = aam.touchRange();
-		List<AbEntity> le = basis.inRange(getTouch(), dire, ds[0], ds[1], false);
+		List<AbEntity> le = basis.inRange(getTouch(), -dire, ds[0], ds[1], false);
 		boolean blds;
 		if (data.isLD() || data.isOmni()) {
 			float bpos = basis.getBase(dire).pos;
@@ -2670,5 +2620,6 @@ public abstract class Entity extends AbEntity {
 				if (le.get(i).ctargetable(traits, this, true))
 					touchEnemy = true;
 		}
+		return touch;
 	}
 }

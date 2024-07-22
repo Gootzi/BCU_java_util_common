@@ -265,28 +265,33 @@ public class StageBasis extends BattleObj {
 	}
 
 	/**
-	 * list of entities in the range of d0~d1 that can be touched by entity with
-	 * this direction and touch mode
-	 * <p>
-	 * excludeLastEdge : If range is d0 ~ d1, normally it's true if d0 <= x <= d1 where x is entity's position<br>If this is true, then it will become d0 <= x < d1
+	 * list of entities in the range d0 ~ d1 that can be touched by entity with given direction and touch mode
+	 * entity is picked if d0 <= pos <= d1 when excludeRightEdge is false
+	 *                  if d0 <= pos <  d1 when excludeRightEdge is true (currently only used by bblast, TODO: waves should use it)
 	 */
-	public List<AbEntity> inRange(int touch, int dire, float d0, float d1, boolean excludeLastEdge) {
-		float start = Math.min(d0, d1);
-		float end = Math.max(d0, d1);
+	public List<AbEntity> inRange(int touch, int dire, float d0, float d1, boolean excludeRightEdge) {
 
 		List<AbEntity> ans = new ArrayList<>();
 
 		if (dire == 0)
 			return ans;
 
-		for (int i = 0; i < le.size(); i++) {
-			if (le.get(i).dire * dire == -1 && (le.get(i).touchable() & touch) > 0 && le.get(i).pos >= start && (excludeLastEdge ? le.get(i).pos < end : le.get(i).pos <= end))
-				ans.add(le.get(i));
+		float left = Math.min(d0, d1);
+		float right = Math.max(d0, d1);
+
+		if (excludeRightEdge) {
+			for (int i = 0; i < le.size(); i++)
+				if (le.get(i).dire == dire && (le.get(i).touchable() & touch) != 0 && le.get(i).pos >= left && le.get(i).pos < right)
+					ans.add(le.get(i));
+		} else {
+			for (int i = 0; i < le.size(); i++)
+				if (le.get(i).dire == dire && (le.get(i).touchable() & touch) != 0 && le.get(i).pos >= left && le.get(i).pos <= right)
+					ans.add(le.get(i));
 		}
 
-		AbEntity b = dire == 1 ? ubase : ebase;
+		AbEntity b = dire == 1 ? ebase : ubase;
 
-		if ((b.touchable() & touch) > 0 && (b.pos - d0) * (b.pos - d1) <= 0)
+		if ((b.touchable() & touch) != 0 && b.pos >= left && b.pos <= right)
 			ans.add(b);
 
 		return ans;

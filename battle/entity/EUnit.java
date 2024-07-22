@@ -108,7 +108,7 @@ public class EUnit extends Entity {
 		super.added(d, p);
 
 		if (isSpirit)
-			atkm.setUp();
+			atkm.startAttack();
 	}
 
 	@Override
