@@ -1138,10 +1138,10 @@ public class StageBasis extends BattleObj {
 	}
 
 	public boolean isBanned(byte comboId) {
-		if (st.getCont().stageLimit == null)
+		if (est.lim.stageLimit == null)
 			return false;
 		else
-			return st.getCont().stageLimit.bannedCatCombo.contains((int) comboId);
+			return est.lim.stageLimit.bannedCatCombo.contains((int) comboId);
 	}
 
 	public void checkGuard() {
@@ -1161,16 +1161,16 @@ public class StageBasis extends BattleObj {
 	}
 
 	public int maxBankLimit() {
-		if (st.getCont().stageLimit == null)
+		if (est.lim.stageLimit == null)
 			return 0;
 		else
-			return st.getCont().stageLimit.maxMoney;
+			return est.lim.stageLimit.maxMoney;
 	}
 
 	public int globalCdLimit() {
-		if (st.getCont().stageLimit == null)
+		if (est.lim.stageLimit == null)
 			return 0;
 		else
-			return st.getCont().stageLimit.globalCooldown;
+			return est.lim.stageLimit.globalCooldown;
 	}
 }

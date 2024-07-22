@@ -33,4 +33,13 @@ public class StageLimit extends Data implements BattleStatic {
         sl.bannedCatCombo.addAll(bannedCatCombo);
         return sl;
     }
+
+    public StageLimit combine(StageLimit second) {
+        StageLimit combined = new StageLimit();
+        combined.maxMoney = second.maxMoney == 0 ? maxMoney : second.maxMoney;
+        combined.globalCooldown = second.globalCooldown == 0 ? globalCooldown : second.globalCooldown;
+        combined.bannedCatCombo.addAll(bannedCatCombo);
+        combined.bannedCatCombo.addAll(second.bannedCatCombo);
+        return combined;
+    }
 }

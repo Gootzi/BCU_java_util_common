@@ -106,7 +106,7 @@ public class StageMap extends Data implements BasedCopable<StageMap, MapColc>,
 	@JsonField(generic = Limit.class)
 	public final ArrayList<Limit> lim = new ArrayList<>();
 	public StageMapInfo info;
-	@JsonField
+	@JsonField(io = JsonField.IOType.R)
 	public StageLimit stageLimit;
 
 	@JsonField(generic = Stage.class)
@@ -161,7 +161,6 @@ public class StageMap extends Data implements BasedCopable<StageMap, MapColc>,
 
 		sm.stars = stars.clone();
 		sm.price = price;
-		sm.stageLimit = stageLimit != null ? stageLimit.clone() : null;
 
 		for (Stage st : list)
 			sm.add(st.copy(sm));

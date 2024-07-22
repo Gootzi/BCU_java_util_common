@@ -368,11 +368,15 @@ public abstract class MapColc extends Data implements IndexContainer.SingleIC<St
 										}
 									});
 
-									if (map.stageLimit == null) {
-										map.stageLimit = new StageLimit(maxMoney, 0, bannedCombo);
-									} else {
-										map.stageLimit.maxMoney = maxMoney;
-										map.stageLimit.bannedCatCombo.addAll(bannedCombo);
+									for (Stage stage : map.list) {
+										if (stage.lim == null)
+											stage.lim = new Limit();
+										if (stage.lim.stageLimit == null) {
+											stage.lim.stageLimit = new StageLimit(maxMoney, 0, bannedCombo);
+										} else {
+											stage.lim.stageLimit.maxMoney = maxMoney;
+											stage.lim.stageLimit.bannedCatCombo.addAll(bannedCombo);
+										}
 									}
 								}
 
@@ -394,11 +398,15 @@ public abstract class MapColc extends Data implements IndexContainer.SingleIC<St
 										}
 									});
 
-									if (map.stageLimit == null) {
-										map.stageLimit = new StageLimit(0, globalCooldown, bannedCombo);
-									} else {
-										map.stageLimit.globalCooldown = globalCooldown;
-										map.stageLimit.bannedCatCombo.addAll(bannedCombo);
+									for (Stage stage : map.list) {
+										if (stage.lim == null)
+											stage.lim = new Limit();
+										if (stage.lim.stageLimit == null) {
+											stage.lim.stageLimit = new StageLimit(0, globalCooldown, bannedCombo);
+										} else {
+											stage.lim.stageLimit.globalCooldown = globalCooldown;
+											stage.lim.stageLimit.bannedCatCombo.addAll(bannedCombo);
+										}
 									}
 								}
 						}
@@ -606,12 +614,21 @@ public abstract class MapColc extends Data implements IndexContainer.SingleIC<St
 
 		@OnInjected
 		public void onInjected() {
-			if (UserProfile.isOlderPack(pack, "0.6.4.0"))
+			boolean oldNames = UserProfile.isOlderPack(pack, "0.6.4.0");
+			if (UserProfile.isOlderPack(pack, "0.7.8.1")) {
 				for (StageMap sm : maps) {
-					sm.names.put(sm.name);
-					for (Stage st : sm.list)
-						st.names.put(st.name);
+					if (oldNames)
+						sm.names.put(sm.name);
+					for (Stage st : sm.list) {
+						if (oldNames)
+							st.names.put(st.name);
+						if (st.lim == null)
+							st.lim = new Limit();
+						if (sm.stageLimit != null)
+							st.lim.stageLimit = sm.stageLimit.clone();
+					}
 				}
+			}
 		}
 	}
 

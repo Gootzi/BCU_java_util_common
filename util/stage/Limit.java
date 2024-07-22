@@ -56,6 +56,8 @@ public class Limit extends Data implements BattleStatic {
 	public CharaGroup group;
 	@JsonField(alias = Identifier.class)
 	public LvRestrict lvr;
+	@JsonField
+	public StageLimit stageLimit;
 
 	/**
 	 * for copy or combine only
@@ -75,6 +77,7 @@ public class Limit extends Data implements BattleStatic {
 		l.max = max;
 		l.group = group;
 		l.lvr = lvr;
+		l.stageLimit = l.stageLimit != null ? l.stageLimit.clone() : null;
 		return l;
 	}
 
@@ -90,16 +93,20 @@ public class Limit extends Data implements BattleStatic {
 		line |= l.line;
 		min = Math.max(min, l.min);
 		max = max > 0 && l.max > 0 ? Math.min(max, l.max) : (max + l.max);
-		if (l.group != null)
+		if (l.group != null) {
 			if (group != null)
 				group = group.combine(l.group);
 			else
 				group = l.group;
-		if (l.lvr != null)
+		}
+		if (l.lvr != null) {
 			if (lvr != null)
 				lvr.combine(l.lvr);
 			else
 				lvr = l.lvr;
+		}
+		if (l.stageLimit != null)
+			stageLimit = stageLimit != null ? stageLimit.combine(l.stageLimit) : l.stageLimit;
 	}
 
 	public boolean unusable(MaskUnit du, int price) {
@@ -116,5 +123,4 @@ public class Limit extends Data implements BattleStatic {
 	public String toString() {
 		return (sid == -1 ? "all stages" : ("" + sid)) + " - " + (star == -1 ? "all stars" : (star + 1) + " star");
 	}
-
 }
