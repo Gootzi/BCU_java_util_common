@@ -10,10 +10,11 @@ import java.util.List;
 
 @JsonClass
 public class StageLimit extends Data implements BattleStatic {
-    @JsonField
     public int maxMoney = 0;
-    @JsonField
     public int globalCooldown = 0;
+    public int[] cdMultiplier = { 100, 100, 100, 100, 100, 100 };
+    public int[] costMultiplier = { 100, 100, 100, 100, 100, 100 };
+    public boolean coolStart = false;
     @JsonField(generic = Integer.class)
     public HashSet<Integer> bannedCatCombo = new HashSet<>();
 

@@ -142,7 +142,7 @@ public abstract class Source {
 			if (UserProfile.isOlderPack(userpack, "0.6.9.1"))
 				this.base = BasePath.ANIM;
 
-			if (UserProfile.isOlderPack(userpack, "0.7.8.0") && pack.equals("_local")) {
+			if (UserProfile.isOlderPack(userpack, "0.7.8.0") && pack.equals(LOCAL)) {
 				AnimCE anim = (AnimCE) getAnim();
 				anim.anims = anim.loader.getMA();
                 for (MaAnim maanim : anim.anims) {

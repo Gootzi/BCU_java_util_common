@@ -140,21 +140,20 @@ public class StageBasis extends BattleObj {
 		maxCannon = bas.t().CanonTime(sttime, isBanned(C_C_SPE));
 
 		int bank = maxBankLimit();
-		int cd = globalCdLimit();
-		if (bank > 0 || cd > 0) {
-			for (int i = 0; i < 2; i++)
-				for (int j = 0; j < 5; j++)
-					elu.get(i, j);
-		}
 		if (bank > 0) {
 			work_lv = 8;
-			money = bank * 100;
+			money = maxBankLimit() * 100;
 		} else {
 			work_lv = 1;
 			if (!isBanned(C_M_LV))
 				work_lv += bas.getInc(C_M_LV);
 			if (!isBanned(C_M_INI))
 				money = bas.getInc(C_M_INI) * 100;
+		}
+		if (est.lim != null && est.lim.stageLimit != null && est.lim.stageLimit.coolStart) {
+			for (int i = 0; i < 2; i++)
+				for (int j = 0; j < 5; j++)
+					elu.get(i, j);
 		}
 
 		cannon = maxCannon * (isBanned(C_C_INI) ? 0 : bas.getInc(C_C_INI)) / 100;
