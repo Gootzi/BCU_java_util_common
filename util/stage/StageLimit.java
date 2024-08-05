@@ -8,7 +8,7 @@ import common.util.Data;
 import java.util.HashSet;
 import java.util.List;
 
-@JsonClass
+@JsonClass(noTag = JsonClass.NoTag.LOAD)
 public class StageLimit extends Data implements BattleStatic {
     public int maxMoney = 0;
     public int globalCooldown = 0;
