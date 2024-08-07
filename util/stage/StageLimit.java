@@ -6,25 +6,19 @@ import common.util.BattleStatic;
 import common.util.Data;
 
 import java.util.HashSet;
-import java.util.List;
 
 @JsonClass(noTag = JsonClass.NoTag.LOAD)
 public class StageLimit extends Data implements BattleStatic {
     public int maxMoney = 0;
     public int globalCooldown = 0;
-    public int[] cdMultiplier = { 100, 100, 100, 100, 100, 100 };
+    public int[] cooldownMultiplier = { 100, 100, 100, 100, 100, 100 };
     public int[] costMultiplier = { 100, 100, 100, 100, 100, 100 };
     public boolean coolStart = false;
     @JsonField(generic = Integer.class)
     public HashSet<Integer> bannedCatCombo = new HashSet<>();
 
     public StageLimit() {
-    }
 
-    public StageLimit(int maxMoney, int globalCooldown, List<Integer> bannedCombo) {
-        this.maxMoney = maxMoney;
-        this.globalCooldown = globalCooldown;
-        this.bannedCatCombo.addAll(bannedCombo);
     }
 
     public StageLimit clone() {
