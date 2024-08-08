@@ -1703,6 +1703,15 @@ public class Data {
 		}
 	}
 
+	public static <T> T silent(SupExc<T> sup) {
+		try {
+			return sup.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public static String restrict(String str) {
 		if (str.length() < restrict_name)
 			return str;
