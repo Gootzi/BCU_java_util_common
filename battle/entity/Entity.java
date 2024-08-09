@@ -812,6 +812,7 @@ public abstract class Entity extends AbEntity {
 				return;
 			float d = tempKBdist;
 			tempKBtype = -1;
+			e.walking = false;
 			e.atkm.stopAtk();
 			e.kbTime = KB_TIME[t];
 			kbType = t;
@@ -2288,7 +2289,7 @@ public abstract class Entity extends AbEntity {
 	/**
 	 * update the entity. order of update:
 	 *  1st iteration (movement) :   TBA, procs time tick -> move (KB, burrow, standard) -> revive
-	 *  2ns iteration (reactions):   validate walking OR go idle, start burrow, start attack -> update attack
+	 *  2nd iteration (reactions):   validate walking OR go idle, start burrow, start attack -> update attack
 	 */
 	@Override
 	public void update() {
@@ -2405,9 +2406,6 @@ public abstract class Entity extends AbEntity {
 			skipSpawnBurrow = false;
 		moved = true;
 
-		if (cantGoMore())
-			return;
-
 		if(status[P_SLOW][0] > 0) {
 
 			pos += 0.25f * dire;
@@ -2433,18 +2431,6 @@ public abstract class Entity extends AbEntity {
 		if (kbTime == 0)
 			lastPosition = pos;
 
-	}
-
-	/**
-	 * Check if the unit can still move
-	 * @return True if the unit is in a position it can no longer move any further
-	 */
-	private boolean cantGoMore() {
-		if (dire == 1) {
-			return pos >= basis.st.len;
-		} else {
-			return pos <= 0;
-		}
 	}
 
 	private void drawAxis(FakeGraphics gra, P p, float siz) {
