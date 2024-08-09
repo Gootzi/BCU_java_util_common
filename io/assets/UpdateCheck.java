@@ -211,23 +211,24 @@ public class UpdateCheck {
 	}
 
 	public static List<Downloader> checkNewMusic(int count) {
-		boolean[] exi = new boolean[count];
-		File music = CommonStatic.ctx.getAssetFile("./music/");
-		if (music.exists()) {
-			File[] musicList = music.listFiles();
+		boolean[] exists = new boolean[count];
+		File musicFolder = CommonStatic.ctx.getAssetFile("./music/");
+		if (musicFolder.exists()) {
+			File[] musicList = musicFolder.listFiles();
 
 			if (musicList != null) {
-				for (File m : musicList)
-					if (m.getName().length() == 7 && m.getName().endsWith(".ogg")) {
-						Integer id = Data.ignore(() -> Integer.parseInt(m.getName().substring(0, 3)));
-						if (id != null)
-							exi[id] = id < count && id >= 0;
+				for (File music : musicList)
+					if (music.getName().length() == 7 && music.getName().endsWith(".ogg")) {
+						int id = CommonStatic.parseIntN(music.getName());
+						if (id >= count)
+							continue;
+						exists[id] = id == -1;
 					}
 			}
 		}
 		List<Downloader> ans = new ArrayList<>();
 		for (int i = 0; i < count; i++)
-			if (!exi[i]) {
+			if (!exists[i]) {
 				File target = CommonStatic.ctx.getAssetFile("./music/" + Data.trio(i) + ".ogg");
 				File temp = CommonStatic.ctx.getAssetFile("./music/.ogg.temp");
 				String url = URL_MUSIC + Data.trio(i) + ".ogg";
