@@ -220,9 +220,8 @@ public class UpdateCheck {
 				for (File music : musicList)
 					if (music.getName().length() == 7 && music.getName().endsWith(".ogg")) {
 						int id = CommonStatic.parseIntN(music.getName());
-						if (id >= count)
-							continue;
-						exists[id] = id == -1;
+						if (id < count && id != -1) // prevents array index out of bounds
+							exists[id] = true;
 					}
 			}
 		}
