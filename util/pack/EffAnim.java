@@ -30,6 +30,20 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 			return path;
 		}
 	}
+	public enum TbaEff implements EffType<TbaEff> {
+		BUFF("buff"), DEBUFF("debuff");
+
+		private final String path;
+
+		TbaEff(String str) {
+			path = str;
+		}
+
+		@Override
+		public String path() {
+			return path;
+		}
+	}
 
 	public enum BarrierEff implements EffType<BarrierEff> {
 		BREAK("_breaker"), DESTR("_destruction"), NONE("");
@@ -265,6 +279,10 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		public EffAnim<DefEff> A_METAL_KILLER;
 		@Order(79)
 		public EffAnim<DefEff> A_E_METAL_KILLER;
+		@Order(80)
+		public EffAnim<TbaEff> A_TBACHANGE;
+		@Order(81)
+		public EffAnim<TbaEff> A_E_TBACHANGE;
 
 		public EffAnim<?>[] values() {
 			Field[] fld = FieldOrder.getDeclaredFields(EffAnimStore.class);
@@ -620,13 +638,14 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		effas.A_E_DMGCUT = new EffAnim<>(dmgcut, vdmgcut, icdmgcut, DefEff.values());
 		effas.A_E_DMGCUT.rev = true;
 
-		String dmgcap = stfs[3] + "dmgcap/dmgcap";
-		VImg vdmgcap = new VImg(dmgcap+".png");
-		ImgCut icdmgcap = ImgCut.newIns(dmgcap+".imgcut");
-		effas.A_DMGCAP = new EffAnim<>(dmgcap, vdmgcap, icdmgcap, DmgCap.values());
-		effas.A_DMGCAP.rev = true;
-
-		effas.A_E_DMGCAP = new EffAnim<>(dmgcap, vdmgcap, icdmgcap, DmgCap.values());
+		String tbachange = stfs[3] + "armor_break/armor_break";
+		VImg vtba = new VImg(tbachange + ".png");
+		ImgCut ictba = ImgCut.newIns(tbachange + ".imgcut");
+		effas.A_TBACHANGE = new EffAnim<>(tbachange, vtba, ictba, TbaEff.values());
+		tbachange = stfs[3] + "armor_break_e/armor_break_e";
+		ictba = ImgCut.newIns(tbachange + ".imgcut");
+		vtba = new VImg(tbachange + ".png");
+		effas.A_E_TBACHANGE = new EffAnim<>(tbachange, vtba, ictba, TbaEff.values());
 	}
 
 	private final VImg vimg;
