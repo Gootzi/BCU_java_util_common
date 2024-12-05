@@ -638,14 +638,13 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		effas.A_E_DMGCUT = new EffAnim<>(dmgcut, vdmgcut, icdmgcut, DefEff.values());
 		effas.A_E_DMGCUT.rev = true;
 
-		String tbachange = stfs[3] + "armor_break/armor_break";
+		String tbachange = "./org/battle/tbachange/tbachange";
 		VImg vtba = new VImg(tbachange + ".png");
 		ImgCut ictba = ImgCut.newIns(tbachange + ".imgcut");
 		effas.A_TBACHANGE = new EffAnim<>(tbachange, vtba, ictba, TbaEff.values());
-		tbachange = stfs[3] + "armor_break_e/armor_break_e";
-		ictba = ImgCut.newIns(tbachange + ".imgcut");
-		vtba = new VImg(tbachange + ".png");
+
 		effas.A_E_TBACHANGE = new EffAnim<>(tbachange, vtba, ictba, TbaEff.values());
+		effas.A_E_TBACHANGE.rev = true;
 	}
 
 	private final VImg vimg;
