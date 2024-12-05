@@ -638,6 +638,12 @@ public class EffAnim<T extends Enum<T> & EffAnim.EffType<T>> extends AnimD<EffAn
 		effas.A_E_DMGCUT = new EffAnim<>(dmgcut, vdmgcut, icdmgcut, DefEff.values());
 		effas.A_E_DMGCUT.rev = true;
 
+		String dmgcap = stfs[3] + "dmgcap/dmgcap";
+		VImg vdmgcap = new VImg(dmgcap+".png");
+		ImgCut icdmgcap = ImgCut.newIns(dmgcap+".imgcut");
+		effas.A_DMGCAP = new EffAnim<>(dmgcap, vdmgcap, icdmgcap, DmgCap.values());
+		effas.A_DMGCAP.rev = true;
+
 		String tbachange = "./org/battle/tbachange/tbachange";
 		VImg vtba = new VImg(tbachange + ".png");
 		ImgCut ictba = ImgCut.newIns(tbachange + ".imgcut");
